@@ -11,17 +11,41 @@
     <body>
         <main>
             <grid class="grid">
-                <div>
+                <div class="canvas-container">
                     <canvas id="hueCanvas" width="720" height="500"></canvas>
                 </div>
-                <div>
+                <div class="colour-picked">
                     <div class="box"></div>
+                    <div class="box2"></div>
                 </div>
-                <form>
-                    <input type="range" id="lightness" name="lightness" min="0" max="100" />
+                <div class="shades">
+                    <div class="shade-pick" data-shade-id="1"></div>
+                    <div class="shade-pick" data-shade-id="2"></div>
+                    <div class="shade-pick" data-shade-id="3"></div>
+                    <div class="shade-pick" data-shade-id="4"></div>
+                    <div class="shade-pick" data-shade-id="5"></div>
+                </div>
+                <div class="c-shades">
+                    <div class="shade-pick-c" data-shade-id="1"></div>
+                    <div class="shade-pick-c" data-shade-id="2"></div>
+                    <div class="shade-pick-c" data-shade-id="3"></div>
+                    <div class="shade-pick-c" data-shade-id="4"></div>
+                    <div class="shade-pick-c" data-shade-id="5"></div>
+                </div>
+                <form class="lightness-container">
+                    <input type="range" class="lightness-range" id="lightness" name="lightness" min="0" max="100" />
+                    <p class="lightness-text">0</p>
                 </form>
+                <div class="colour-array">
+                    <div class="colour-history" data-colour-id="1"></div>
+                    <div class="colour-history" data-colour-id="2"></div>
+                    <div class="colour-history" data-colour-id="3"></div>
+                    <div class="colour-history" data-colour-id="4"></div>
+                    <div class="colour-history" data-colour-id="5"></div>
+                    <div class="colour-history" data-colour-id="6"></div>
+                </div>
             </grid>
         </main>
-        <script src="js/index.js" async defer></script>
+        <script src="js/index.js" type="module" async defer></script>
     </body>
 </html>

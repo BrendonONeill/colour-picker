@@ -7,27 +7,127 @@
     box-sizing: border-box;
 }
 
-main
+:root
 {
-    background-color: grey;
-}
-.grid
-{
-    background-color: white;
-    padding: 1rem;
-    width: 100%;
-    display: flex;
+    --main-ui-colour: #212529;
+    --main-border-colour: #ffffff;
+    --main-bg: #343a40;
 }
 
+main
+{
+    background-color: var(--main-bg);
+}
+
+.grid
+{
+    padding: 1rem;
+    width: 100%;
+    display: grid;
+    grid-template-rows: repeat(36, 25px);
+    grid-template-columns: repeat(75, 25px);
+    border-radius: 5px;
+}
+
+.canvas-container
+{
+    grid-row: 1/24;
+    grid-column: 1/32;
+    padding: 0.4rem;
+    border-radius: 5px;
+    background-color: var(--main-ui-colour);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lightness-container
+{
+    grid-row: 25/27;
+    grid-column: 1/32;
+    padding: 1rem;
+    background-color: var(--main-ui-colour);
+    color: var(--main-border-colour);
+    border-radius: 5px;
+}
+
+.lightness-range
+{
+    width: 80%;
+}
 
 canvas
 {
-    border: 1px solid black;
     cursor: crosshair;
+    border: 3px solid var(--main-border-colour);
 }
 
+.colour-picked
+{
+    grid-row: 1/11;
+    grid-column: 33/38;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+    background-color: var(--main-ui-colour);
+    border-radius: 5px;
+}
 
 .box{
     width: 100px;
     height: 100px;
+    border-radius: 5px;
+    border: 2px solid var(--main-border-colour);
+}
+.box2{
+    width: 100px;
+    height: 100px;
+    border-radius: 5px;
+    background-color: #efefef;
+    border: 2px solid var(--main-border-colour);
+    
+}
+
+.colour-array
+{
+    display: flex;
+    grid-row: 28/31;
+    grid-column: 1/32;
+    padding: 1rem;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--main-ui-colour);
+    border-radius: 5px;
+}
+
+.colour-history, .shade-pick, .shade-pick-c
+{
+    width: 50px;
+    height: 50px;
+    border: 2px solid var(--main-border-colour);
+    border-radius: 5px;
+}
+
+.shades
+{
+    grid-row: 1/4;
+    grid-column: 40/55;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: var(--main-ui-colour);
+    border-radius: 5px;
+}
+
+.c-shades
+{
+    grid-row: 5/8;
+    grid-column: 40/55;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: var(--main-ui-colour);
+    border-radius: 5px;
 }
