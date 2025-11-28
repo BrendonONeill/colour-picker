@@ -7,13 +7,20 @@ const divColourArray = document.querySelectorAll('.colour-history');
 const divShade = document.querySelectorAll('.shade-pick');
 const divShadeC = document.querySelectorAll('.shade-pick-c');
 
+const divAnaPos = document.querySelectorAll('.ana-pick-pos');
+const divAnaMain = document.querySelectorAll('.ana-pick-main');
+const divAnaNeg = document.querySelectorAll('.ana-pick-neg');
+
+const hoverColour = document.querySelector(".hover-colour");
+const colourpaste = document.querySelector(".colour-paste");
+
 const box = document.querySelector('.box');
 const box2 = document.querySelector('.box2');
 const slider = document.getElementById('lightness')
 const sliderText = document.querySelector('.lightness-text');
 
 let light = 50;
-const colourArray = new Array(6).fill(null)
+const colourArray = new Array(10).fill(null)
 console.log(colourArray)
 
 
@@ -26,7 +33,8 @@ canvas.addEventListener("mousemove", (e) => {
     const sat = Math.round((100 - (y / canvas.height) * 100));
     const color = `hsl(${hue}, ${sat}%, ${light}%)`;
     box.style.backgroundColor = color
-
+    hoverColour.style.backgroundColor = color
+    hoverColour.style.transform = `translate(${(e.clientX + 10)}px, ${(e.clientY - 35)}px)`;
 })
 
 canvas.addEventListener("click", (e) => {
@@ -37,8 +45,20 @@ canvas.addEventListener("click", (e) => {
     const sat = Math.round((100 - (y / canvas.height) * 100));
     const color = `hsl(${hue}, ${sat}%, ${light}%)`;
     box2.style.backgroundColor = color
-    updateShadeArray(hue,sat,light)
+    colourpaste.textContent = color
+    let complementaryHue  = complementaryHSL(hue)
+    let analogousArray = AnalogousHSLArray(hue)
+    updateShadeArray(sat,Number(light),[divShade,divShadeC],[hue,complementaryHue])
+    updateShadeArray(sat,Number(light),[divAnaPos,divAnaMain,divAnaNeg],analogousArray)
     updateColourArray(color)
+})
+
+canvas.addEventListener("mouseenter", (e) => {
+    hoverColour.classList.remove("colour-display-none")
+})
+
+canvas.addEventListener("mouseout", (e) => {
+    hoverColour.classList.add("colour-display-none")
 })
 
 function createCanvas(light)
@@ -115,7 +135,7 @@ function updateColourArray(colour)
     }
     else
     {
-        for(let i = colourArray.length; i >= 0; i--)
+        for(let i = colourArray.length-1; i >= 0; i--)
         {
             let before = i - 1
             if(before >= 0)
@@ -127,6 +147,7 @@ function updateColourArray(colour)
                 colourArray[i] = colour
             }
         }
+        updateDivColour()
     }
 }
 
@@ -144,17 +165,46 @@ function updateDivColour()
 }
 
 
-function updateShadeArray(h,s,l)
+function updateShadeArray(s,l,arrayOfDivs, arrayOfHues)
 {
-    let shades = [-20,-10,0,10,20]
-
-    divShade.forEach((shade,index) => {
-        shade.style.backgroundColor = updateShade(h,s,l, shades[index])
+    let shades = [];
+    if(l > 80)
+    {
+        let tempValue = 100 - l;
+        if(tempValue > 10)
+        {
+            shades = [-20,-10,0,10,tempValue]
+        }
+        else
+        {
+            shades = [-30,-20,-10,0,tempValue]
+        }
+    }
+    else if(l < 20)
+    {
+        if(l < 10)
+        {
+            
+            shades = [-l,0,10,20,30]
+        }
+        else
+        {
+            shades = [-l,-10,0,10,20]
+        }
+    }
+    else
+    {
+        shades = [-20,-10,0,10,20]
+    }
+    console.log("called")
+    debugger
+    for(let i = 0; i < arrayOfDivs.length; i++)
+    {
+        arrayOfDivs[i].forEach((shade,index) => {
+        console.log(shade)
+        shade.style.backgroundColor = updateShade(arrayOfHues[i],s,l, shades[index])
     })
-    let newH = complementaryHSL(h)
-    divShadeC.forEach((shade,index) => {
-        shade.style.backgroundColor = updateShade(newH,s,l, shades[index])
-    })
+    }
 }
 
 
@@ -167,4 +217,22 @@ function complementaryHSL(h) {
   // Ensure hue stays between 0–360
   const compH = (h + 180) % 360;
   return compH;
+}
+
+
+function AnalogousHSLArray(h)
+{
+    let analogousArray = []
+    if((h + 30) > 360)
+    {
+        analogousArray.push((h + 30) - 360)
+    }
+    else
+    {
+        analogousArray.push(h + 30)
+    }
+    analogousArray.push(h)
+    analogousArray.push(Math.abs(h - 30))
+    console.log(analogousArray)
+    return analogousArray
 }

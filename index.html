@@ -10,13 +10,29 @@
     </head>
     <body>
         <main>
+            <div class="hover-colour colour-display-none">
+
+            </div>
             <grid class="grid">
                 <div class="canvas-container">
                     <canvas id="hueCanvas" width="720" height="500"></canvas>
                 </div>
                 <div class="colour-picked">
-                    <div class="box"></div>
-                    <div class="box2"></div>
+                    <div class="selected-container">
+                        <h1>Selection One</h1>
+                        <button class="button-reset box"></button>
+                    </div>
+                    <div class="selected-container">
+                        <h1>Selection Two</h1>
+                        <button class="button-reset box2"></button>
+                    </div>
+                </div>
+                <div class="colours-picked-text">
+                    <p>HSL</p>
+                    <p class="colour-paste">hsl(100 100% 100%)</p>
+                </div>
+                <div class="complementary-shades">
+                    <p>Complementary shades</p>
                 </div>
                 <div class="shades">
                     <div class="shade-pick" data-shade-id="1"></div>
@@ -32,6 +48,32 @@
                     <div class="shade-pick-c" data-shade-id="4"></div>
                     <div class="shade-pick-c" data-shade-id="5"></div>
                 </div>
+
+                <div class="analogous-shades">
+                    <p>Analogous shades</p>
+                </div>
+                <div class="shades-ana-pos">
+                    <div class="ana-pick-pos" data-shade-id="1"></div>
+                    <div class="ana-pick-pos" data-shade-id="2"></div>
+                    <div class="ana-pick-pos" data-shade-id="3"></div>
+                    <div class="ana-pick-pos" data-shade-id="4"></div>
+                    <div class="ana-pick-pos" data-shade-id="5"></div>
+                </div>
+                <div class="shades-ana-main">
+                    <div class="ana-pick-main" data-shade-id="1"></div>
+                    <div class="ana-pick-main" data-shade-id="2"></div>
+                    <div class="ana-pick-main" data-shade-id="3"></div>
+                    <div class="ana-pick-main" data-shade-id="4"></div>
+                    <div class="ana-pick-main" data-shade-id="5"></div>
+                </div>
+                <div class="shades-ana-neg">
+                    <div class="ana-pick-neg" data-shade-id="1"></div>
+                    <div class="ana-pick-neg" data-shade-id="2"></div>
+                    <div class="ana-pick-neg" data-shade-id="3"></div>
+                    <div class="ana-pick-neg" data-shade-id="4"></div>
+                    <div class="ana-pick-neg" data-shade-id="5"></div>
+                </div>
+
                 <form class="lightness-container">
                     <input type="range" class="lightness-range" id="lightness" name="lightness" min="0" max="100" />
                     <p class="lightness-text">0</p>
@@ -43,6 +85,10 @@
                     <div class="colour-history" data-colour-id="4"></div>
                     <div class="colour-history" data-colour-id="5"></div>
                     <div class="colour-history" data-colour-id="6"></div>
+                    <div class="colour-history" data-colour-id="7"></div>
+                    <div class="colour-history" data-colour-id="8"></div>
+                    <div class="colour-history" data-colour-id="9"></div>
+                    <div class="colour-history" data-colour-id="10"></div>
                 </div>
             </grid>
         </main>
