@@ -20,7 +20,7 @@
                 <div class="colour-picked">
                     <div class="selected-container">
                         <h1>Selection One</h1>
-                        <button class="button-reset box"></button>
+                        <button class="button-reset box activeSelected"></button>
                     </div>
                     <div class="selected-container">
                         <h1>Selection Two</h1>
@@ -28,8 +28,18 @@
                     </div>
                 </div>
                 <div class="colours-picked-text">
-                    <p>HSL</p>
-                    <p class="colour-paste">hsl(100 100% 100%)</p>
+                    <div>
+                        <p>HSL</p>
+                        <p class="colour-paste-hsl colour-paste">hsl(0 0% 0%)</p>
+                    </div>
+                    <div>
+                        <p>HEX</p>
+                        <p class="colour-paste-hex colour-paste">#000000</p>
+                    </div>
+                    <div>
+                        <p>RGBA</p>
+                        <p class="colour-paste-rgba colour-paste">rgba(0, 0, 0, 1)</p>
+                    </div>
                 </div>
                 <div class="complementary-shades">
                     <p>Complementary shades</p>
@@ -76,7 +86,7 @@
 
                 <form class="lightness-container">
                     <input type="range" class="lightness-range" id="lightness" name="lightness" min="0" max="100" />
-                    <p class="lightness-text">0</p>
+                    <p class="lightness-text">50</p>
                 </form>
                 <div class="colour-array">
                     <div class="colour-history" data-colour-id="1"></div>
