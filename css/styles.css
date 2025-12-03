@@ -229,7 +229,7 @@ canvas
     justify-content: space-around;
     align-items: center;
     background-color: var(--main-ui-colour);
-    border-radius: 0 5px 0 0;
+    border-radius: 0 0 0 0;
 }
 .shades-ana-neg
 {
@@ -239,7 +239,7 @@ canvas
     justify-content: space-around;
     align-items: center;
     background-color: var(--main-ui-colour);
-    border-radius: 0 5px 0 0;
+    border-radius: 0 0 5px 5px;
 }
 
 
