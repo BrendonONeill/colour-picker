@@ -136,7 +136,6 @@ slider.addEventListener("change",(e) => {
 
 function updateColourArray(colour)
 {
-    debugger
     if(colourArray[0] === null)
     {
         colourArray[0] = colour
@@ -189,6 +188,24 @@ function updateColourArray(colour)
     }
 }
 
+function updateColourArrayPart2(num)
+{
+    let clickedColour = colourArray[num - 1]
+    for(let i = (num - 1); i >= 0; i--)
+    {
+        let before = i - 1
+        if(before >= 0)
+        {
+            colourArray[i] = colourArray[i - 1] 
+        }
+        else
+        {
+            colourArray[i] = clickedColour
+        }
+    }
+    updateDivColour()
+}
+
 
 function updateDivColour()
 {
@@ -234,7 +251,6 @@ function updateShadeArray(s,l,arrayOfDivs, arrayOfHues)
     {
         shades = [-20,-10,0,10,20]
     }
-    debugger
     for(let i = 0; i < arrayOfDivs.length; i++)
     {
         arrayOfDivs[i].forEach((shade,index) => {
@@ -273,7 +289,7 @@ function AnalogousHSLArray(h)
 }
 
 
-function handleColourUpdates(colour, hue, light, sat, updateArray)
+function handleColourUpdates(colour, hue, light, sat, updateArray,part2 = null)
 {
     let complementaryHue  = complementaryHSL(hue)
     let analogousArray = AnalogousHSLArray(hue)
@@ -281,7 +297,14 @@ function handleColourUpdates(colour, hue, light, sat, updateArray)
     updateShadeArray(sat,Number(light),[divAnaPos,divAnaMain,divAnaNeg],analogousArray)
     if(updateArray)
     {
-        updateColourArray(colour)
+        if(part2 !== null)
+        {
+            updateColourArrayPart2(part2)
+        }
+        else
+        {
+            updateColourArray(colour)
+        }
     }
 }
 
@@ -307,6 +330,21 @@ function updateColourText()
 }
 
 
+divColourArray.forEach((button) => {
+    button.addEventListener("click", (e) => {
+        let hslValue = rgbaToHsl(e.target.style.backgroundColor);
+        setSelectedColoursValues(hslValue.colour,hslValue.h,hslValue.s,hslValue.l);
+        if(selectedColours.activeSelection === "firstSelected")
+        {
+            selectedColour.style.backgroundColor = hslValue.colour
+        }
+        else
+        {
+            selectedColour2.style.backgroundColor = hslValue.colour
+        }
+        handleColourUpdates(hslValue.colour, hslValue.h, hslValue.l, hslValue.s, true,e.target.dataset.colourId)
+    })
+})
 
 function hslToRgba(h, s, l, a = 1) {
   // Convert percentages to decimals
@@ -358,4 +396,39 @@ function hslToHex(h, s, l) {
   };
 
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+}
+
+function rgbaToHsl(rgbaString) {
+  // Extract RGB values from string
+  const match = rgbaString.match(/\d+/g);
+  const [r, g, b] = match.map((val) => parseInt(val) / 255);
+
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  const delta = max - min;
+
+  let h = 0;
+  let s = 0;
+  let l = (max + min) / 2;
+
+  if (delta !== 0) {
+    // Calculate saturation
+    s = l > 0.5 ? delta / (2 - max - min) : delta / (max + min);
+
+    // Calculate hue
+    if (max === r) {
+      h = ((g - b) / delta + (g < b ? 6 : 0)) / 6;
+    } else if (max === g) {
+      h = ((b - r) / delta + 2) / 6;
+    } else {
+      h = ((r - g) / delta + 4) / 6;
+    }
+  }
+
+  // Convert to degrees and percentages
+  h = Math.round(h * 360);
+  s = Math.round(s * 100);
+  l = Math.round(l * 100);
+
+  return {colour:`hsl(${h}, ${s}%, ${l}%)`,h,s,l};
 }

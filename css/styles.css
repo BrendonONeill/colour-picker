@@ -14,6 +14,7 @@
     --main-ui-colour: #212529;
     --main-border-colour: #ffffff;
     --main-bg: #343a40;
+    --hover-highlight: #eae151;
 }
 
 body
@@ -155,6 +156,17 @@ canvas
     border-radius: 5px;
 }
 
+.colour-history
+{
+    background-color: var(--main-ui-colour);
+    cursor: pointer;
+}
+
+.colour-history:hover
+{
+    border: 2px solid var(--hover-highlight);
+}
+
 .complementary-shades
 {
     background-color: var(--main-ui-colour);
@@ -287,8 +299,21 @@ canvas
     border: 2px solid var(--main-border-colour);  
 }
 
+.box:hover,.box2:hover
+{
+    border: 5px solid var(--hover-highlight);
+}
+
 .colour-paste
 {
+    
+}
+
+.text-button
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     background-color: var(--main-bg);
     padding: 0.6rem;
     border-radius: 5px;
