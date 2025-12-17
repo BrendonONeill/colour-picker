@@ -432,3 +432,39 @@ function rgbaToHsl(rgbaString) {
 
   return {colour:`hsl(${h}, ${s}%, ${l}%)`,h,s,l};
 }
+
+
+const testing = [["03045e","0077b6","00b4d8","90e0ef","caf0f8"],["ff99c8","fcf6bd","d0f4de","a9def9","e4c1f9"],["1a535c","4ecdc4","f7fff7","ff6b6b","ffe66d"],["e5d9f2","f5efff","cdc1ff","a594f9","7371fc"]]
+
+function generatePalettes(arr)
+{
+    const collection = document.querySelector(".palettes-container")
+    for (let i = 0; i < arr.length; i++) {
+        let mainContainer = document.createElement("div");
+        mainContainer.classList.add("palette");
+        let newPalette = generatePalette(mainContainer, arr[i])
+        collection.append(newPalette);
+    }
+}
+
+
+function generatePalette(mainContainer, arr)
+{
+    for (let i = 0; i < arr.length; i++) {
+        let div = document.createElement("div");
+        let colourDiv = document.createElement("div");
+        let colourP = document.createElement("p");
+
+        div.classList.add("palette-colour-container");
+        colourDiv.classList.add("colour-pal");
+        colourDiv.style.background =`#${arr[i]}`;
+        colourP.textContent = arr[i].toUpperCase();
+        div.append(colourDiv,colourP);
+
+        mainContainer.append(div);
+    }
+
+    return mainContainer;
+}
+
+generatePalettes(testing)
