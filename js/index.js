@@ -68,7 +68,7 @@ canvas.addEventListener("mousemove", (e) => {
     const sat = Math.round((100 - (y / canvas.height) * 100));
     const color = `hsl(${hue}, ${sat}%, ${light}%)`;
     hoverColour.style.backgroundColor = color
-    hoverColour.style.transform = `translate(${(e.clientX + 10)}px, ${(e.clientY - 35)}px)`;
+    hoverColour.style.transform = `translate(${((e.clientX + window.scrollX) + 10)}px, ${((e.clientY + window.scrollY) - 35)}px)`;
 })
 
 canvas.addEventListener("click", (e) => {
