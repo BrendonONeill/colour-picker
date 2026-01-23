@@ -21,12 +21,27 @@ const selectedColour2 = document.querySelector('.box2');
 const slider = document.getElementById('lightness')
 const sliderText = document.querySelector('.lightness-text');
 
+const whiteAANormal = document.getElementById('w-aan');
+const whiteAAANormal = document.getElementById('w-aaan');
+const whiteAAALarge = document.getElementById('w-aal');
+const whiteAALarge = document.getElementById('w-aaal');
+const blackAANormal = document.getElementById('b-aan');
+const blackAAANormal = document.getElementById('b-aaan');
+const blackAALarge = document.getElementById('b-aal');
+const blackAAALarge = document.getElementById('b-aaal');
+const otherAANormal = document.getElementById('o-aan');
+const otherAAANormal = document.getElementById('o-aaan');
+const otherAALarge = document.getElementById('o-aal');
+const otherAAALarge = document.getElementById('o-aaal');
+
+
+
 let light = 50;
 const colourArray = new Array(10).fill(null)
 
 let selectedColours = {
-    firstSelected : {hue: 0, light: 0, sat: 0, hsl:"hsl(0 0% 0%)", hex:"#000000", rgba:"rgba(0, 0, 0, 1)"},
-    secondSelected : {hue: 0, light: 0, sat: 0, hsl:"hsl(0, 100%, 100%)", hex:"#ffffff", rgba:"rgba(255, 255, 255, 1)"},
+    firstSelected : {hue: 0, light: 0, sat: 0, hsl:"hsl(0 0% 0%)", hex:"#000000", rgba:"rgba(0, 0, 0, 1)",contrast:{white:{aaNormal:null,aaaNormal:null,aaLarge:null,aaaLarge:null},black:{aaNormal:null,aaaNormal:null,aaLarge:null,aaaLarge:null},other:{aaNormal:null,aaaNormal:null,aaLarge:null,aaaLarge:null}}},
+    secondSelected : {hue: 0, light: 0, sat: 0, hsl:"hsl(0, 100%, 100%)", hex:"#ffffff", rgba:"rgba(255, 255, 255, 1)", contrast:{white:{aaNormal:null,aaaNormal:null,aaLarge:null,aaaLarge:null},black:{aaNormal:null,aaaNormal:null,aaLarge:null,aaaLarge:null},other:{aaNormal:null,aaaNormal:null,aaLarge:null,aaaLarge:null}}},
     activeSelection : "firstSelected"
 }
 
@@ -89,6 +104,7 @@ canvas.addEventListener("click", (e) => {
     }
    
     handleColourUpdates(color, hue, light, sat, true)
+    allcontrastCheckers(selectedColours.activeSelection)
 })
 
 canvas.addEventListener("mouseenter", (e) => {
@@ -431,6 +447,199 @@ function rgbaToHsl(rgbaString) {
   l = Math.round(l * 100);
 
   return {colour:`hsl(${h}, ${s}%, ${l}%)`,h,s,l};
+}
+
+function allcontrastCheckers(active)
+{
+    let mainColour = selectedColours[active].rgba.slice(5).split(", ")
+    let otherColour;
+
+    if(active == "firstSelected")
+    {
+        otherColour = selectedColours.secondSelected.rgba.slice(5).split(", ")
+    }
+    else
+    {
+        otherColour = selectedColours.firstSelected.rgba.slice(5).split(", ")
+    }
+    let whiteObj = contrastChecker({r:255,g:255,b:255},{r:mainColour[0],g:mainColour[1],b:mainColour[2]})
+    let blackObj = contrastChecker({r:0,g:0,b:0},{r:mainColour[0],g:mainColour[1],b:mainColour[2]})
+    let otherObj = contrastChecker({r:mainColour[0],g:mainColour[1],b:mainColour[2]},{r:otherColour[0],g:otherColour[1],b:otherColour[2]})
+    
+    selectedColours[active].contrast.white.aaNormal = whiteObj.AANormal
+    selectedColours[active].contrast.white.aaaNormal = whiteObj.AAANormal
+    selectedColours[active].contrast.white.aaLarge = whiteObj.AALarge
+    selectedColours[active].contrast.white.aaaLarge = whiteObj.AAALarge
+
+    selectedColours[active].contrast.black.aaNormal = blackObj.AANormal
+    selectedColours[active].contrast.black.aaaNormal = blackObj.AAANormal
+    selectedColours[active].contrast.black.aaLarge = blackObj.AALarge
+    selectedColours[active].contrast.black.aaaLarge = blackObj.AAALarge
+
+    selectedColours[active].contrast.other.aaNormal = otherObj.AANormal
+    selectedColours[active].contrast.other.aaaNormal = otherObj.AAANormal
+    selectedColours[active].contrast.other.aaLarge = otherObj.AALarge
+    selectedColours[active].contrast.other.aaaLarge = otherObj.AAALarge
+    
+    updateChecker()
+}
+
+function contrastChecker(textColour, backgroundColour)
+{
+    const text = getLuminance(textColour.r,textColour.g,textColour.b);
+    const background = getLuminance(backgroundColour.r,backgroundColour.g,backgroundColour.b);
+
+    const ratio = getContrastRatio(text,background);
+    
+    let results = {AANormal:null,AAANormal:null,AALarge:null,AAALarge:null}
+        if(ratio >= 4.5)
+        {
+            results.AANormal = true
+            results.AAALarge = true
+        }
+        else
+        {
+            results.AANormal = false
+            results.AAALarge = false
+        }
+
+        if(ratio >= 7)
+        {
+             results.AAANormal = true
+        }
+        else
+        {
+            results.AAANormal = false
+        }
+
+        if(ratio >= 3)
+        {
+            results.AALarge = true
+        }
+        else
+        {
+             results.AALarge = false
+        }
+
+    return results
+}
+
+function getLuminance(r, g, b) {
+  const [rs, gs, bs] = [r, g, b].map((c) => {
+    c = c / 255;
+    return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+  });
+  return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs;
+}
+
+function getContrastRatio(l1, l2) {
+  const lighter = Math.max(l1, l2);
+  const darker = Math.min(l1, l2);
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
+
+function updateChecker()
+{
+    const checkerObj = selectedColours[selectedColours.activeSelection].contrast;
+    if(checkerObj.white.aaNormal)
+    {
+        whiteAANormal.src = "true.svg";
+    }
+    else
+    {
+        whiteAANormal.src = "false.svg";
+    }
+    if(checkerObj.white.aaaNormal)
+    {
+        whiteAAANormal.src = "true.svg";
+    }
+    else
+    {
+        whiteAAANormal.src = "false.svg";
+    }
+    if(checkerObj.white.aaLarge)
+    {
+        whiteAALarge.src = "true.svg";
+    }
+    else
+    {
+        whiteAALarge.src = "false.svg";
+    }
+    if(checkerObj.white.aaaLarge)
+    {
+        whiteAAALarge.src = "true.svg";
+    }
+    else
+    {
+        whiteAAALarge.src = "false.svg";
+    }
+
+    if(checkerObj.black.aaNormal)
+    {
+        blackAANormal.src = "true.svg";
+    }
+    else
+    {
+        blackAANormal.src = "false.svg";
+    }
+    if(checkerObj.black.aaaNormal)
+    {
+        blackAAANormal.src = "true.svg";
+    }
+    else
+    {
+        blackAAANormal.src = "false.svg";
+    }
+    if(checkerObj.black.aaLarge)
+    {
+        blackAALarge.src = "true.svg";
+    }
+    else
+    {
+        blackAALarge.src = "false.svg";
+    }
+    if(checkerObj.black.aaaLarge)
+    {
+        blackAAALarge.src = "true.svg";
+    }
+    else
+    {
+        blackAAALarge.src = "false.svg";
+    }
+
+    if(checkerObj.other.aaNormal)
+    {
+        otherAANormal.src = "true.svg";
+    }
+    else
+    {
+        otherAANormal.src = "false.svg";
+    }
+    if(checkerObj.other.aaaNormal)
+    {
+        otherAAANormal.src = "true.svg";
+    }
+    else
+    {
+        otherAAANormal.src = "false.svg";
+    }
+    if(checkerObj.other.aaLarge)
+    {
+        otherAALarge.src = "true.svg";
+    }
+    else
+    {
+        otherAALarge.src = "false.svg";
+    }
+    if(checkerObj.other.aaaLarge)
+    {
+        otherAAALarge.src = "true.svg";
+    }
+    else
+    {
+        otherAAALarge.src = "false.svg";
+    }
 }
 
 
