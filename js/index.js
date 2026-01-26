@@ -141,7 +141,7 @@ function clearCanvas()
 }
 
 
-slider.addEventListener("change",(e) => {
+slider.addEventListener("input",(e) => {
 
     clearCanvas()
     sliderText.textContent = e.target.value;

@@ -14,10 +14,16 @@
 
             </div>
             <grid class="grid">
+                <section class="grid-main-canvas--slider">
                 <div class="canvas-container">
                     <canvas id="hueCanvas" width="720" height="500"></canvas>
                 </div>
-                <div class="colour-picked">
+                <form class="lightness-container">
+                    <input type="range" class="lightness-range" id="lightness" name="lightness" min="0" max="100" />
+                    <p class="lightness-text">50</p>
+                </form>
+                </section>
+                <div class="grid-main-colour-selection">
                     <div class="selected-container">
                         <h1>Selection One</h1>
                         <button class="button-reset box activeSelected"></button>
@@ -27,7 +33,7 @@
                         <button class="button-reset box2"></button>
                     </div>
                 </div>
-                <div class="colours-picked-text">
+                <div class="grid-main-colour-selection-text">
                     <div>
                         <p>HSL</p>
                         <button class="button-reset text-button">
@@ -50,7 +56,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="accessibly-container">
+                <div class="grid-main-colour-accessibly">
                     <p class="accessibly-header">Contrast Checker</p>
                     <p class="accessibly-white-header">White text</p>
                     
@@ -132,6 +138,25 @@
         
                 </div>
 
+                <section class="grid-main-colour-history">
+                    <div class="colour-array-title">
+                    <p>Colour History</p>
+                </div>
+                <div class="colour-array">
+                    <button class="colour-history" data-colour-id="1"></button>
+                    <button class="colour-history" data-colour-id="2"></button>
+                    <button class="colour-history" data-colour-id="3"></button>
+                    <button class="colour-history" data-colour-id="4"></button>
+                    <button class="colour-history" data-colour-id="5"></button>
+                    <button class="colour-history" data-colour-id="6"></button>
+                    <button class="colour-history" data-colour-id="7"></button>
+                    <button class="colour-history" data-colour-id="8"></button>
+                    <button class="colour-history" data-colour-id="9"></button>
+                    <button class="colour-history" data-colour-id="10"></button>
+                </div>
+                </section>
+
+
                 <div class="shades-header">
                     <p>Shades</p>
                 </div>
@@ -178,25 +203,8 @@
                     <div class="ana-pick-neg" data-shade-id="5"></div>
                 </div>
 
-                <form class="lightness-container">
-                    <input type="range" class="lightness-range" id="lightness" name="lightness" min="0" max="100" />
-                    <p class="lightness-text">50</p>
-                </form>
-                <div class="colour-array-title">
-                    <p>Colour History</p>
-                </div>
-                <div class="colour-array">
-                    <button class="colour-history" data-colour-id="1"></button>
-                    <button class="colour-history" data-colour-id="2"></button>
-                    <button class="colour-history" data-colour-id="3"></button>
-                    <button class="colour-history" data-colour-id="4"></button>
-                    <button class="colour-history" data-colour-id="5"></button>
-                    <button class="colour-history" data-colour-id="6"></button>
-                    <button class="colour-history" data-colour-id="7"></button>
-                    <button class="colour-history" data-colour-id="8"></button>
-                    <button class="colour-history" data-colour-id="9"></button>
-                    <button class="colour-history" data-colour-id="10"></button>
-                </div>
+                
+                
                 <div class="palettes-header">
                     <p>My recommended palettes</p>
                 </div>

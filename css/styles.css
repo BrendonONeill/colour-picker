@@ -38,6 +38,15 @@ main
     border-radius: 5px;
 }
 
+.grid-main-canvas--slider
+{
+    grid-row: 1/27;
+    grid-column: 1/32;
+    display: grid;
+    grid-template-rows: repeat(27, 25px);
+    grid-template-columns: repeat(32, 25px);
+}
+
 .canvas-container
 {
     grid-row: 1/24;
@@ -101,7 +110,7 @@ canvas
     border: 3px solid var(--main-border-colour);
 }
 
-.colour-picked
+.grid-main-colour-selection
 {
     grid-row: 1/9;
     grid-column: 33/44;
@@ -122,25 +131,34 @@ canvas
     padding-block: 1rem;
 }
 
+.grid-main-colour-history
+{
+    grid-row: 22/27;
+    grid-column: 33/60;
+    display: grid;
+    grid-template-rows: repeat(5, 25px);
+    grid-template-columns: repeat(27, 25px);
+}
+
 .colour-array
 {
     display: flex;
-    grid-row: 24/27;
-    grid-column: 33/60;
+    grid-row: 3/6;
+    grid-column: 1/28;
     padding: 1rem;
     gap: 1rem;
     justify-content: center;
     align-items: center;
     background-color: var(--main-ui-colour);
-    border-radius: 0 0 5px 5px;
+    border-radius: 0 5px 5px 5px;
 }
 
 .colour-array-title
 {
     display: flex;
     color: white;
-    grid-row: 22/24;
-    grid-column: 33/40;
+    grid-row: 1/3;
+    grid-column: 1/8;
     padding: 1rem;
     justify-content: center;
     align-items: center;
@@ -324,7 +342,7 @@ canvas
     color: white;
 }
 
-.colours-picked-text
+.grid-main-colour-selection-text
 {
     grid-row: 10/21;
     grid-column: 33/44;
@@ -360,7 +378,7 @@ canvas
 
 }
 
-.accessibly-container
+.grid-main-colour-accessibly
 {
     background-color: var(--main-ui-colour);
     color: white;
