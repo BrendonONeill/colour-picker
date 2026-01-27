@@ -2,6 +2,9 @@
 
 const canvas = document.getElementById('hueCanvas');
 const ctx = canvas.getContext('2d');
+
+let canvasWidth;
+let canvasHeight; 
 const colorBox = document.getElementById('colorBox');
 const divColourArray = document.querySelectorAll('.colour-history');
 const divShade = document.querySelectorAll('.shade-pick');
@@ -33,7 +36,6 @@ const otherAANormal = document.getElementById('o-aan');
 const otherAAANormal = document.getElementById('o-aaan');
 const otherAALarge = document.getElementById('o-aal');
 const otherAAALarge = document.getElementById('o-aaal');
-
 
 
 let light = 50;
@@ -75,12 +77,48 @@ selectedColour2.addEventListener("click", () => {
         }
 })
 
+function createCanvas(light,width,height)
+{
+    let countHor = 0
+    for(let i = 0; i <= 360; i++)
+    {
+        ctx.fillStyle = `hsla(${i}, 100%, ${light}%, 1.00)`;
+        ctx.fillRect(countHor, 0, width, height);
+        let countVert = height;
+        for(let j = 99; j >= 0; j--)
+        {
+            ctx.fillStyle = `hsla(${i}, ${j}%, ${light}%, 1.00)`;
+            ctx.fillRect(countHor, countVert, width, height);
+            countVert = countVert + height;
+        }
+        countHor = countHor + width;
+    }
+}
+
+if(window.screen.width > 710)
+{
+    canvas.style.width = "720px";
+    canvas.style.height = "500px";
+    canvasWidth = 720
+    canvasHeight = 500
+    createCanvas(light,2,5)
+}
+else
+{
+    canvas.style.width = "360px";
+    canvas.style.height = "250px";
+    canvasWidth = 360
+    canvasHeight = 250
+    createCanvas(light,2,5)
+}
+
+
 canvas.addEventListener("mousemove", (e) => {
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    const hue = Math.round((x / canvas.width) * 360);
-    const sat = Math.round((100 - (y / canvas.height) * 100));
+    const hue = Math.round((x / canvasWidth) * 360);
+    const sat = Math.round((100 - (y / canvasHeight) * 100));
     const color = `hsl(${hue}, ${sat}%, ${light}%)`;
     hoverColour.style.backgroundColor = color
     hoverColour.style.transform = `translate(${((e.clientX + window.scrollX) + 10)}px, ${((e.clientY + window.scrollY) - 35)}px)`;
@@ -90,8 +128,8 @@ canvas.addEventListener("click", (e) => {
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    const hue = Math.round((x / canvas.width) * 360);
-    const sat = Math.round((100 - (y / canvas.height) * 100));
+    const hue = Math.round((x / canvasWidth) * 360);
+    const sat = Math.round((100 - (y / canvasHeight) * 100));
     const color = `hsl(${hue}, ${sat}%, ${light}%)`;
     setSelectedColoursValues(color,hue,sat,light);
     if(selectedColours.activeSelection === "firstSelected")
@@ -115,29 +153,12 @@ canvas.addEventListener("mouseout", (e) => {
     hoverColour.classList.add("colour-display-none")
 })
 
-function createCanvas(light)
-{
-    let countHor = 0
-    for(let i = 0; i <= 360; i++)
-    {
-        ctx.fillStyle = `hsla(${i}, 100%, ${light}%, 1.00)`;
-        ctx.fillRect(countHor, 0, 2, 5);
-        let countVert = 5;
-        for(let j = 99; j >= 0; j--)
-        {
-            ctx.fillStyle = `hsla(${i}, ${j}%, ${light}%, 1.00)`;
-            ctx.fillRect(countHor, countVert, 2, 5);
-            countVert = countVert + 5;
-        }
-        countHor = countHor + 2;
-    }
-}
 
-createCanvas(light)
+
 
 function clearCanvas()
 {
-    ctx.clearRect(0, 0, 720, 500);
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 }
 
 
@@ -146,7 +167,7 @@ slider.addEventListener("input",(e) => {
     clearCanvas()
     sliderText.textContent = e.target.value;
     light = e.target.value
-    createCanvas(light)
+    createCanvas(light,2,5)
 })
 
 
