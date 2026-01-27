@@ -39,6 +39,7 @@ main
 }
 
 
+
 .grid-main-canvas--slider
 {
     grid-row: 1/27;
@@ -575,3 +576,113 @@ canvas
     border-radius: 5px;
 }
 
+@media (min-width: 800px) and (max-width: 1200px) {
+
+.grid
+{
+    width: 50%;
+    display: grid;
+    grid-template-rows: repeat(100, 25px);
+    grid-template-columns: repeat(60, 25px);
+    border-radius: 5px;
+}
+
+.grid-main-canvas--slider
+{
+    grid-row: 28/55;
+    grid-column: 1/32;
+    display: grid;
+    grid-template-rows: repeat(27, 25px);
+    grid-template-columns: repeat(32, 25px);
+}
+
+.grid-main-colour-selection
+{
+    grid-row: 1/9;
+    grid-column: 3/14;
+    display: flex;
+    justify-content: space-around;
+    background-color: var(--main-ui-colour);
+    border-radius: 5px;
+    color: white;
+    padding: 0.6rem;
+}
+
+.grid-main-colour-selection-text
+{
+    grid-row: 10/21;
+    grid-column: 3/14;
+    display: flex;
+    flex-direction: column;
+    align-items:normal;
+    justify-content: center;
+    
+    background-color: var(--main-ui-colour);
+    color: white;
+    padding: 0.8rem;
+    gap: 0.8rem;
+    border-radius: 5px;
+}
+
+.grid-main-colour-accessibly
+{
+    background-color: var(--main-ui-colour);
+    color: white;
+    grid-row: 1/21;
+    grid-column: 15/30;
+    border-radius: 5px;
+    padding: 1rem;
+
+    display: grid;
+    grid-template-rows: repeat(25, 1fr);
+    grid-template-columns: repeat(5,1fr);
+}
+
+.grid-main-colour-history
+{
+    grid-row: 22/27;
+    grid-column: 3/30;
+    display: grid;
+    grid-template-rows: repeat(5, 25px);
+    grid-template-columns: repeat(27, 25px);
+}
+
+.grid-main-shades
+{
+    grid-row: 55/69;
+    grid-column: 1/60;
+    display: grid;
+    grid-template-rows: repeat(24, 25px);
+    grid-template-columns: repeat(75, 25px);
+}
+
+.palettes-header
+{
+    grid-row: 70/72;
+    grid-column: 1/12;
+    background-color: var(--main-ui-colour);
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.palettes-container
+{
+    grid-row: 73/95;
+    grid-column: 5/28;
+    background-color: var(--main-ui-colour);
+    border-radius: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: start;
+    justify-content: center;
+    padding: 1rem;
+    column-gap: 2rem;
+    row-gap: 1rem;
+}
+
+
+}
