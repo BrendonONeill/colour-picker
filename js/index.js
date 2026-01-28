@@ -698,3 +698,5 @@ function generatePalette(mainContainer, arr)
 }
 
 generatePalettes(testing)
+
+console.log(window.innerWidth)
