@@ -37,6 +37,9 @@ const otherAAANormal = document.getElementById('o-aaan');
 const otherAALarge = document.getElementById('o-aal');
 const otherAAALarge = document.getElementById('o-aaal');
 
+const textButtons = document.querySelectorAll(".text-button");
+const tabCopy = document.querySelector(".tab");
+
 
 let light = 50;
 const colourArray = new Array(10).fill(null)
@@ -121,7 +124,7 @@ canvas.addEventListener("mousemove", (e) => {
     const sat = Math.round((100 - (y / canvasHeight) * 100));
     const color = `hsl(${hue}, ${sat}%, ${light}%)`;
     hoverColour.style.backgroundColor = color
-    hoverColour.style.transform = `translate(${((e.clientX + window.scrollX) + 10)}px, ${((e.clientY + window.scrollY) - 35)}px)`;
+    hoverColour.style.transform = `translate(${((e.clientX + window.scrollX) + 5)}px, ${((e.clientY + window.scrollY) - 110)}px)`;
 })
 
 canvas.addEventListener("click", (e) => {
@@ -663,6 +666,17 @@ function updateChecker()
     }
 }
 
+textButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+        let a = button.querySelector("p").textContent;
+        tabCopy.classList.remove("colour-display-none")
+        navigator.clipboard.writeText(a)
+        setTimeout(() => {
+            tabCopy.classList.add("colour-display-none")
+        },3000)
+    })
+    
+})
 
 const testing = [["03045e","0077b6","00b4d8","90e0ef","caf0f8"],["ff99c8","fcf6bd","d0f4de","a9def9","e4c1f9"],["1a535c","4ecdc4","f7fff7","ff6b6b","ffe66d"],["e5d9f2","f5efff","cdc1ff","a594f9","7371fc"]]
 
@@ -699,4 +713,3 @@ function generatePalette(mainContainer, arr)
 
 generatePalettes(testing)
 
-console.log(window.innerWidth)
