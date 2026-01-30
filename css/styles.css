@@ -15,7 +15,7 @@
     --main-border-colour: #ffffff;
     --main-bg: #343a40;
     --main-ui-colour-darker: #16181b;
-    --hover-highlight: #eae151;
+    --hover-highlight: #FDFFB4;
 }
 
 body
@@ -39,6 +39,20 @@ nav h1
 main
 {
     background-color: var(--main-bg);
+}
+
+.button-reset
+{
+  -webkit-appearance: none;
+  border-radius: 0;
+  text-align: inherit;
+  background: none;
+  box-shadow: none;
+  padding: 0;
+  cursor: pointer;
+  border: none;
+  color: inherit;
+  font: inherit;
 }
 
 .grid
@@ -194,7 +208,7 @@ canvas
     cursor: pointer;
 }
 
-.colour-history:hover
+.colour-history:hover, .shade-pick:hover, .shade-pick-c:hover, .ana-pick-pos:hover, .ana-pick-main:hover, .ana-pick-neg:hover
 {
     border: 2px solid var(--hover-highlight);
 }
@@ -312,19 +326,7 @@ canvas
 }
 
 
-.button-reset
-{
-  -webkit-appearance: none;
-  border-radius: 0;
-  text-align: inherit;
-  background: none;
-  box-shadow: none;
-  padding: 0;
-  cursor: pointer;
-  border: none;
-  color: inherit;
-  font: inherit;
-}
+
 
 .box{
     width: 100px;
@@ -820,3 +822,16 @@ canvas
 }
 
  }
+
+@media (max-width: 400px){
+
+    
+.grid
+{
+    padding: 2rem 0;
+    width: 100%;
+    grid-template-rows: repeat(125, 25px);
+    grid-template-columns: repeat(15, 25px);
+    border-radius: 5px;
+}
+}

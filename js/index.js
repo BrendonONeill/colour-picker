@@ -145,7 +145,7 @@ canvas.addEventListener("click", (e) => {
     }
    
     handleColourUpdates(color, hue, light, sat, true)
-    allcontrastCheckers(selectedColours.activeSelection)
+    allContrastCheckers(selectedColours.activeSelection)
 })
 
 canvas.addEventListener("mouseenter", (e) => {
@@ -372,19 +372,63 @@ function updateColourText()
 
 divColourArray.forEach((button) => {
     button.addEventListener("click", (e) => {
-        let hslValue = rgbaToHsl(e.target.style.backgroundColor);
-        setSelectedColoursValues(hslValue.colour,hslValue.h,hslValue.s,hslValue.l);
-        if(selectedColours.activeSelection === "firstSelected")
-        {
-            selectedColour.style.backgroundColor = hslValue.colour
-        }
-        else
-        {
-            selectedColour2.style.backgroundColor = hslValue.colour
-        }
-        handleColourUpdates(hslValue.colour, hslValue.h, hslValue.l, hslValue.s, true,e.target.dataset.colourId)
+        handleColourClicked(e.target.style.backgroundColor, e.target.dataset.colourId)
     })
 })
+
+divShade.forEach((button) => {
+    if(!button.classList.contains("main"))
+    {
+        button.addEventListener("click", (e) => {
+        handleColourClicked(e.target.style.backgroundColor)
+    })
+    }
+    
+})
+
+divShadeC.forEach((button) => {
+        button.addEventListener("click", (e) => {
+        handleColourClicked(e.target.style.backgroundColor)
+    })
+})
+
+divAnaPos.forEach((button) => {
+        button.addEventListener("click", (e) => {
+        handleColourClicked(e.target.style.backgroundColor)
+    })
+})
+
+divAnaMain.forEach((button) => {
+    if(!button.classList.contains("main"))
+    {
+        button.addEventListener("click", (e) => {
+        handleColourClicked(e.target.style.backgroundColor)
+    })
+    }
+    
+})
+
+divAnaNeg.forEach((button) => {
+        button.addEventListener("click", (e) => {
+        handleColourClicked(e.target.style.backgroundColor)
+    }) 
+})
+
+function handleColourClicked(rgba,colourId=null)
+{
+    let hslValue = rgbaToHsl(rgba);
+    setSelectedColoursValues(hslValue.colour,hslValue.h,hslValue.s,hslValue.l);
+    if(selectedColours.activeSelection === "firstSelected")
+    {
+        selectedColour.style.backgroundColor = hslValue.colour
+    }
+    else
+    {
+        selectedColour2.style.backgroundColor = hslValue.colour
+    }
+    handleColourUpdates(hslValue.colour, hslValue.h, hslValue.l, hslValue.s, true,colourId)
+    allContrastCheckers(selectedColours.activeSelection)
+}
 
 function hslToRgba(h, s, l, a = 1) {
   // Convert percentages to decimals
@@ -473,7 +517,7 @@ function rgbaToHsl(rgbaString) {
   return {colour:`hsl(${h}, ${s}%, ${l}%)`,h,s,l};
 }
 
-function allcontrastCheckers(active)
+function allContrastCheckers(active)
 {
     let mainColour = selectedColours[active].rgba.slice(5).split(", ")
     let otherColour;
@@ -678,7 +722,7 @@ textButtons.forEach((button) => {
     
 })
 
-const testing = [["03045e","0077b6","00b4d8","90e0ef","caf0f8"],["ff99c8","fcf6bd","d0f4de","a9def9","e4c1f9"],["1a535c","4ecdc4","f7fff7","ff6b6b","ffe66d"],["e5d9f2","f5efff","cdc1ff","a594f9","7371fc"]]
+const testing = [["03045e","0077b6","00b4d8","90e0ef","caf0f8"],["ff99c8","fcf6bd","d0f4de","a9def9","e4c1f9"],["1a535c","4ecdc4","f7fff7","ff6b6b","ffe66d"],["e5d9f2","f5efff","cdc1ff","a594f9","7371fc"],["ef7674","ec5766","da344d","d91e36","c42348"],["000000","66666e","9999a1","e6e6e9","f4f4f6"]]
 
 function generatePalettes(arr)
 {
@@ -696,12 +740,14 @@ function generatePalette(mainContainer, arr)
 {
     for (let i = 0; i < arr.length; i++) {
         let div = document.createElement("div");
-        let colourDiv = document.createElement("div");
+        let colourDiv = document.createElement("button");
         let colourP = document.createElement("p");
 
         div.classList.add("palette-colour-container");
-        colourDiv.classList.add("colour-pal");
+        colourDiv.classList.add("button-reset", "colour-pal");
+        colourDiv.setAttribute('aria-label', `Palette colour #${arr[i]}`);
         colourDiv.style.background =`#${arr[i]}`;
+        colourDiv.addEventListener("click", (e) => handleColourClicked(e.target.style.backgroundColor))
         colourP.textContent = arr[i].toUpperCase();
         div.append(colourDiv,colourP);
 

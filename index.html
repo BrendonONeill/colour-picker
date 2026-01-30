@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-GB">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
+        <title>Hyu-Sync</title>
+        <meta name="description" content="This is a colour picker application that provides you with contrast checker to make sure you are following the WCAG guidelines when selecting colours.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="css/styles.css">
     </head>
@@ -24,18 +24,18 @@
                     <canvas id="hueCanvas" width="720" height="500"></canvas>
                 </div>
                 <form class="lightness-container">
-                    <input type="range" class="lightness-range" id="lightness" name="lightness" min="0" max="100" />
+                    <input type="range" class="lightness-range" aria-label="colour lightest range" id="lightness" name="lightness" min="0" max="100" />
                     <p class="lightness-text">50</p>
                 </form>
                 </section>
                 <div class="grid-main-colour-selection">
                     <div class="selected-container">
                         <h1>Selection One</h1>
-                        <button class="button-reset box activeSelected"></button>
+                        <button aria-label="first selection colour"  class="button-reset box activeSelected"></button>
                     </div>
                     <div class="selected-container">
                         <h1>Selection Two</h1>
-                        <button class="button-reset box2"></button>
+                        <button aria-label="second selection colour" class="button-reset box2"></button>
                     </div>
                 </div>
                 <div class="grid-main-colour-selection-text">
@@ -148,16 +148,16 @@
                     <p>Colour History</p>
                 </div>
                 <div class="colour-array">
-                    <button class="colour-history" data-colour-id="1"></button>
-                    <button class="colour-history" data-colour-id="2"></button>
-                    <button class="colour-history" data-colour-id="3"></button>
-                    <button class="colour-history" data-colour-id="4"></button>
-                    <button class="colour-history" data-colour-id="5"></button>
-                    <button class="colour-history" data-colour-id="6"></button>
-                    <button class="colour-history" data-colour-id="7"></button>
-                    <button class="colour-history" data-colour-id="8"></button>
-                    <button class="colour-history" data-colour-id="9"></button>
-                    <button class="colour-history" data-colour-id="10"></button>
+                    <button class="colour-history" aria-label="colour history 1" data-colour-id="1"></button>
+                    <button class="colour-history" aria-label="colour history 2" data-colour-id="2"></button>
+                    <button class="colour-history" aria-label="colour history 3" data-colour-id="3"></button>
+                    <button class="colour-history" aria-label="colour history 4" data-colour-id="4"></button>
+                    <button class="colour-history" aria-label="colour history 5" data-colour-id="5"></button>
+                    <button class="colour-history" aria-label="colour history 6" data-colour-id="6"></button>
+                    <button class="colour-history" aria-label="colour history 7" data-colour-id="7"></button>
+                    <button class="colour-history" aria-label="colour history 8" data-colour-id="8"></button>
+                    <button class="colour-history" aria-label="colour history 9" data-colour-id="9"></button>
+                    <button class="colour-history" aria-label="colour history 10" data-colour-id="10"></button>
                 </div>
                 </section>
 
@@ -170,43 +170,43 @@
                     <p>Complementary shades</p>
                 </div>
                 <div class="shades">
-                    <div class="shade-pick" data-shade-id="1"></div>
-                    <div class="shade-pick" data-shade-id="2"></div>
-                    <div class="shade-pick" data-shade-id="3"></div>
-                    <div class="shade-pick" data-shade-id="4"></div>
-                    <div class="shade-pick" data-shade-id="5"></div>
+                    <button class="button-reset shade-pick" aria-label="colour shade darkest" data-shade-id="1"></button>
+                    <button class="button-reset shade-pick" aria-label="colour shade darker" data-shade-id="2"></button>
+                    <button class="main button-reset shade-pick" aria-label="colour shade main" data-shade-id="3"></button>
+                    <button class="button-reset shade-pick" aria-label="colour shade lighter" data-shade-id="4"></button>
+                    <button class="button-reset shade-pick" aria-label="colour shade lightest" data-shade-id="5"></button>
                 </div>
                 <div class="c-shades">
-                    <div class="shade-pick-c" data-shade-id="1"></div>
-                    <div class="shade-pick-c" data-shade-id="2"></div>
-                    <div class="shade-pick-c" data-shade-id="3"></div>
-                    <div class="shade-pick-c" data-shade-id="4"></div>
-                    <div class="shade-pick-c" data-shade-id="5"></div>
+                    <button class="button-reset shade-pick-c" aria-label="complementary colour shade darkest" data-shade-id="1"></button>
+                    <button class="button-reset shade-pick-c" aria-label="complementary colour shade darker" data-shade-id="2"></button>
+                    <button class="button-reset shade-pick-c" aria-label="complementary colour shade main" data-shade-id="3"></button>
+                    <button class="button-reset shade-pick-c" aria-label="complementary colour shade lighter" data-shade-id="4"></button>
+                    <button class="button-reset shade-pick-c" aria-label="complementary colour shade lightest" data-shade-id="5"></button>
                 </div>
 
                 <div class="analogous-shades">
                     <p>Analogous shades</p>
                 </div>
                 <div class="shades-ana-pos">
-                    <div class="ana-pick-pos" data-shade-id="1"></div>
-                    <div class="ana-pick-pos" data-shade-id="2"></div>
-                    <div class="ana-pick-pos" data-shade-id="3"></div>
-                    <div class="ana-pick-pos" data-shade-id="4"></div>
-                    <div class="ana-pick-pos" data-shade-id="5"></div>
+                    <button class="button-reset ana-pick-pos" aria-label="positive colour shade darkest" data-shade-id="1"></button>
+                    <button class="button-reset ana-pick-pos" aria-label="positive colour shade darker" data-shade-id="2"></button>
+                    <button class="button-reset ana-pick-pos" aria-label="positive colour shade main" data-shade-id="3"></button>
+                    <button class="button-reset ana-pick-pos" aria-label="positive colour shade lighter" data-shade-id="4"></button>
+                    <button class="button-reset ana-pick-pos" aria-label="positive colour shade lightest" data-shade-id="5"></button>
                 </div>
                 <div class="shades-ana-main">
-                    <div class="ana-pick-main" data-shade-id="1"></div>
-                    <div class="ana-pick-main" data-shade-id="2"></div>
-                    <div class="ana-pick-main" data-shade-id="3"></div>
-                    <div class="ana-pick-main" data-shade-id="4"></div>
-                    <div class="ana-pick-main" data-shade-id="5"></div>
+                    <button class="button-reset ana-pick-main" aria-label="main colour shade darkest" data-shade-id="1"></button>
+                    <button class="button-reset ana-pick-main" aria-label="main colour shade darker" data-shade-id="2"></button>
+                    <button class="main button-reset ana-pick-main" aria-label="main colour shade main" data-shade-id="3"></button>
+                    <button class="button-reset ana-pick-main" aria-label="main colour shade lighter" data-shade-id="4"></button>
+                    <button class="button-reset ana-pick-main" aria-label="main colour shade lightest" data-shade-id="5"></button>
                 </div>
                 <div class="shades-ana-neg">
-                    <div class="ana-pick-neg" data-shade-id="1"></div>
-                    <div class="ana-pick-neg" data-shade-id="2"></div>
-                    <div class="ana-pick-neg" data-shade-id="3"></div>
-                    <div class="ana-pick-neg" data-shade-id="4"></div>
-                    <div class="ana-pick-neg" data-shade-id="5"></div>
+                    <button class="button-reset ana-pick-neg" aria-label="negative colour shade darkest"  data-shade-id="1"></button>
+                    <button class="button-reset ana-pick-neg" aria-label="negative colour shade darker"  data-shade-id="2"></button>
+                    <button class="button-reset ana-pick-neg" aria-label="negative colour shade main"  data-shade-id="3"></button>
+                    <button class="button-reset ana-pick-neg" aria-label="negative colour shade lighter"  data-shade-id="4"></button>
+                    <button class="button-reset ana-pick-neg" aria-label="negative colour shade lightest"  data-shade-id="5"></button>
                 </div>
 
                 </section>
