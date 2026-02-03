@@ -40,6 +40,8 @@ const otherAAALarge = document.getElementById('o-aaal');
 const textButtons = document.querySelectorAll(".text-button");
 const tabCopy = document.querySelector(".tab");
 
+let pendingUpdate = false
+
 
 let light = 50;
 const colourArray = new Array(10).fill(null)
@@ -125,6 +127,15 @@ canvas.addEventListener("mousemove", (e) => {
     const color = `hsl(${hue}, ${sat}%, ${light}%)`;
     hoverColour.style.backgroundColor = color
     hoverColour.style.transform = `translate(${((e.clientX + window.scrollX) + 5)}px, ${((e.clientY + window.scrollY) - 110)}px)`;
+
+    if (!pending) {
+    pending = true;
+    requestAnimationFrame(() => {
+        hoverColour.style.backgroundColor = color
+        hoverColour.style.transform = `translate(${((e.clientX + window.scrollX) + 5)}px, ${((e.clientY + window.scrollY) - 110)}px)`;
+      pending = false;
+    });
+  }
 })
 
 canvas.addEventListener("click", (e) => {
@@ -134,7 +145,7 @@ canvas.addEventListener("click", (e) => {
     const hue = Math.round((x / canvasWidth) * 360);
     const sat = Math.round((100 - (y / canvasHeight) * 100));
     const color = `hsl(${hue}, ${sat}%, ${light}%)`;
-    setSelectedColoursValues(color,hue,sat,light);
+    setSelectedColoursValues(hue,sat,light);
     if(selectedColours.activeSelection === "firstSelected")
     {
          selectedColour.style.backgroundColor = color
@@ -170,7 +181,13 @@ slider.addEventListener("input",(e) => {
     clearCanvas()
     sliderText.textContent = e.target.value;
     light = e.target.value
-    createCanvas(light,2,5)
+    if(!pendingUpdate) {
+        pendingUpdate = true;
+        requestAnimationFrame(() => {
+            createCanvas(light,2,5);
+            pendingUpdate = false;
+        })
+    }
 })
 
 
@@ -348,13 +365,14 @@ function handleColourUpdates(colour, hue, light, sat, updateArray,part2 = null)
     }
 }
 
-function setSelectedColoursValues(colour,hue,sat,light)
+function setSelectedColoursValues(hue,sat,light)
 {
     selectedColours[selectedColours.activeSelection].hue = hue
     selectedColours[selectedColours.activeSelection].sat = sat
     selectedColours[selectedColours.activeSelection].light = light
-    selectedColours[selectedColours.activeSelection].hsl = colour
+    selectedColours[selectedColours.activeSelection].hsl = `hsl(${Math.round(hue)}, ${Math.round(sat)}%, ${Math.round(light)}%)`
     let colourHex = hslToHex(hue,sat,light);
+    ///
     let colourRGBA = hslToRgba(hue,sat,light, 1);
     selectedColours[selectedColours.activeSelection].hex = colourHex
     selectedColours[selectedColours.activeSelection].rgba = colourRGBA
@@ -365,7 +383,7 @@ function setSelectedColoursValues(colour,hue,sat,light)
 function updateColourText()
 {
     colourpasteHSL.textContent = selectedColours[selectedColours.activeSelection].hsl
-    colourpasteHEX.textContent = selectedColours[selectedColours.activeSelection].hex
+    colourpasteHEX.textContent = selectedColours[selectedColours.activeSelection].hex.toUpperCase()
     colourpasteRGBA.textContent = selectedColours[selectedColours.activeSelection].rgba
 }
 
@@ -417,7 +435,7 @@ divAnaNeg.forEach((button) => {
 function handleColourClicked(rgba,colourId=null)
 {
     let hslValue = rgbaToHsl(rgba);
-    setSelectedColoursValues(hslValue.colour,hslValue.h,hslValue.s,hslValue.l);
+    setSelectedColoursValues(hslValue.h,hslValue.s,hslValue.l);
     if(selectedColours.activeSelection === "firstSelected")
     {
         selectedColour.style.backgroundColor = hslValue.colour
@@ -458,6 +476,7 @@ function hslToRgba(h, s, l, a = 1) {
 
 
 function hslToHex(h, s, l) {
+  console.log(h,s,l)
   s /= 100;
   l /= 100;
 
@@ -473,13 +492,17 @@ function hslToHex(h, s, l) {
   else if (h < 240) [r, g, b] = [0, x, c];
   else if (h < 300) [r, g, b] = [x, 0, c];
   else [r, g, b] = [c, 0, x];
-
+  console.log(r,g,b)
   const toHex = (v) => {
-    const hex = Math.round((v + m) * 255).toString(16);
-    return hex.length === 1 ? "0" + hex : hex;
+  const raw = (v + m) * 255;
+  const rounded = Math.round((raw + Number.EPSILON) * 1e10) / 1e10;
+  const hex = Math.round(rounded).toString(16);
+  return hex.padStart(2, "0");
   };
 
-  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+  const hexString = `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+  console.log(hexString)
+  return hexString;
 }
 
 function rgbaToHsl(rgbaString) {
@@ -508,11 +531,10 @@ function rgbaToHsl(rgbaString) {
       h = ((r - g) / delta + 4) / 6;
     }
   }
-
   // Convert to degrees and percentages
-  h = Math.round(h * 360);
-  s = Math.round(s * 100);
-  l = Math.round(l * 100);
+  h = h * 360;
+  s = s * 100;
+  l = l * 100;
 
   return {colour:`hsl(${h}, ${s}%, ${l}%)`,h,s,l};
 }
