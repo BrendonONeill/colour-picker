@@ -21,6 +21,15 @@ const colourpasteRGBA = document.querySelector(".colour-paste-rgba");
 
 const selectedColour = document.querySelector('.box');
 const selectedColour2 = document.querySelector('.box2');
+
+const selectedColourText = document.getElementById("selected-one-input");
+const selectedColour2Text = document.getElementById("selected-two-input");
+
+let selectedColourTextValue = ""
+let selectedColour2TextValue = ""
+
+const textForms = document.querySelectorAll(".text-form")
+
 const slider = document.getElementById('lightness')
 const sliderText = document.querySelector('.lightness-text');
 
@@ -60,6 +69,7 @@ selectedColour.addEventListener("click", () => {
             selectedColours.activeSelection = "firstSelected"
             handleColourUpdates(selectedColours.firstSelected.hsl,selectedColours.firstSelected.hue,selectedColours.firstSelected.light,selectedColours.firstSelected.sat, false)
             updateColourText()
+            allContrastCheckers(selectedColours.activeSelection)
         }
         if(selectedColour2.classList.contains("activeSelected"))
         {
@@ -68,6 +78,8 @@ selectedColour.addEventListener("click", () => {
         
 })
 
+
+
 selectedColour2.addEventListener("click", () => {
         if(!selectedColour2.classList.contains("activeSelected"))
         {
@@ -75,12 +87,129 @@ selectedColour2.addEventListener("click", () => {
             selectedColours.activeSelection = "secondSelected"
             handleColourUpdates(selectedColours.secondSelected.hsl,selectedColours.secondSelected.hue,selectedColours.secondSelected.light,selectedColours.secondSelected.sat, false)
             updateColourText()
+            allContrastCheckers(selectedColours.activeSelection)
         }
         if(selectedColour.classList.contains("activeSelected"))
         {
             selectedColour.classList.remove("activeSelected");
         }
 })
+
+selectedColourText.addEventListener("focus",(e) => {
+    selectedColourTextValue = e.target.value;
+})
+
+selectedColour2Text.addEventListener("focus",(e) => {
+    selectedColour2TextValue = e.target.value;
+})
+
+selectedColourText.addEventListener("blur", () => {
+    console.log(selectedColourTextValue);
+    let value = selectedColourText.value.trim()
+    if(!value) return;
+    if(value === selectedColourTextValue) return;
+    if(!CSS.supports("color", value)){return}
+    else
+    {
+        let rgbValue;
+        let hslObj;
+        let hexValue;
+        if(value.startsWith("hsl" || "HSL"))
+        {
+            hslObj = stripHslString(value.toLowerCase())
+            hslObj.colour = `hsl(${Math.round(hslObj.h)},${Math.round(hslObj.s)}%,${Math.round(hslObj.l)}%)`
+            hexValue = hslToHex(hslObj.h,hslObj.s,hslObj.l)
+            rgbValue = hslToRgba(hslObj.h,hslObj.s,hslObj.l)
+        }
+        else if(value.startsWith("#"))
+        {
+            hexValue = value;
+            rgbValue = hexToRgb(value);
+            hslObj = rgbaToHsl(rgbValue);
+        }
+        else if(value.startsWith("rgb" || "RGB"))
+        {
+            rgbValue = value;
+            hslObj = rgbaToHsl(value);
+            hexValue = hslToHex(hslObj.h,hslObj.s,hslObj.l);
+
+        }
+        else
+        {
+            return
+        }
+        
+        selectedColours.firstSelected.rgba = rgbValue;
+        selectedColours.firstSelected.hex = hexValue;
+        selectedColours.firstSelected.hsl = hslObj.colour;
+        selectedColours.firstSelected.hue = hslObj.h;
+        selectedColours.firstSelected.sat = hslObj.s;
+        selectedColours.firstSelected.light = hslObj.l;
+        selectedColour.style.backgroundColor = value;
+        if(selectedColours.activeSelection === "firstSelected")
+        {
+            updateColourText()
+            handleColourUpdates(selectedColours.firstSelected.hsl,selectedColours.firstSelected.hue,selectedColours.firstSelected.light,selectedColours.firstSelected.sat, true)
+        }
+    }
+})
+
+selectedColour2Text.addEventListener("blur", () => {
+    let value = selectedColour2Text.value.trim()
+    if(!value) return;
+    if(value === selectedColour2TextValue) return;
+    if(!CSS.supports("color", value)){return}
+    else
+    {
+        let rgbValue;
+        let hslObj;
+        let hexValue;
+        if(value.startsWith("hsl" || "HSL"))
+        {
+            hslObj = stripHslString(value.toLowerCase())
+            hslObj.colour = `hsl(${Math.round(hslObj.h)},${Math.round(hslObj.s)}%,${Math.round(hslObj.l)}%)`
+            hexValue = hslToHex(hslObj.h,hslObj.s,hslObj.l)
+            rgbValue = hslToRgba(hslObj.h,hslObj.s,hslObj.l)
+        }
+        else if(value.startsWith("#"))
+        {
+            hexValue = value;
+            rgbValue = hexToRgb(value);
+            hslObj = rgbaToHsl(rgbValue);
+        }
+        else if(value.startsWith("rgb" || "RGB"))
+        {
+            rgbValue = value;
+            hslObj = rgbaToHsl(value);
+            hexValue = hslToHex(hslObj.h,hslObj.s,hslObj.l);
+        }
+        else
+        {
+            return
+        }
+        
+        selectedColours.secondSelected.rgba = rgbValue;
+        selectedColours.secondSelected.hex = hexValue;
+        selectedColours.secondSelected.hsl = hslObj.colour;
+        selectedColours.secondSelected.hue = hslObj.h;
+        selectedColours.secondSelected.sat = hslObj.s;
+        selectedColours.secondSelected.light = hslObj.l;
+        selectedColour2.style.backgroundColor = value;
+        if(selectedColours.activeSelection === "secondSelected")
+        {
+            updateColourText()
+            handleColourUpdates(selectedColours.secondSelected.hsl,selectedColours.secondSelected.hue,selectedColours.secondSelected.light,selectedColours.secondSelected.sat, true);
+        }
+    }
+})
+
+textForms.forEach((form) => {
+    form.addEventListener('submit', (e) => {
+    e.preventDefault();
+});
+})
+
+
 
 function createCanvas(light,width,height)
 {
@@ -128,12 +257,12 @@ canvas.addEventListener("mousemove", (e) => {
     hoverColour.style.backgroundColor = color
     hoverColour.style.transform = `translate(${((e.clientX + window.scrollX) + 5)}px, ${((e.clientY + window.scrollY) - 110)}px)`;
 
-    if (!pending) {
-    pending = true;
+    if (!pendingUpdate) {
+    pendingUpdate = true;
     requestAnimationFrame(() => {
         hoverColour.style.backgroundColor = color
         hoverColour.style.transform = `translate(${((e.clientX + window.scrollX) + 5)}px, ${((e.clientY + window.scrollY) - 110)}px)`;
-      pending = false;
+        pendingUpdate = false;
     });
   }
 })
@@ -448,6 +577,22 @@ function handleColourClicked(rgba,colourId=null)
     allContrastCheckers(selectedColours.activeSelection)
 }
 
+function stripHslString(hsl) {
+  const matches = hsl.match(/\d+/g);
+
+  if (!matches || matches.length < 3) {
+    return null;
+  }
+
+  const [h, s, l] = matches.map(Number);
+
+  return {
+    h,
+    s,
+    l,
+  };
+}
+
 function hslToRgba(h, s, l, a = 1) {
   // Convert percentages to decimals
   s /= 100;
@@ -505,6 +650,18 @@ function hslToHex(h, s, l) {
   return hexString;
 }
 
+function hexToRgb(hex) {
+  let cleaned = hex.replace(/^#/, "");
+  if (cleaned.length === 3) {
+    cleaned = cleaned.split("").map((c) => c + c).join("");
+  }
+  const bigint = parseInt(cleaned, 16);
+  const r = (bigint >> 16) & 255;
+  const g = (bigint >> 8) & 255;
+  const b = bigint & 255;
+  return `rgb(${r}, ${g}, ${b})`;
+}
+
 function rgbaToHsl(rgbaString) {
   // Extract RGB values from string
   const match = rgbaString.match(/\d+/g);
@@ -536,7 +693,7 @@ function rgbaToHsl(rgbaString) {
   s = s * 100;
   l = l * 100;
 
-  return {colour:`hsl(${h}, ${s}%, ${l}%)`,h,s,l};
+  return {colour:`hsl(${Math.round(h)}, ${Math.round(s)}%, ${Math.round(l)}%)`,h,s,l};
 }
 
 function allContrastCheckers(active)
