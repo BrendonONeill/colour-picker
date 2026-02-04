@@ -103,138 +103,12 @@ selectedColour2Text.addEventListener("focus",(e) => {
     selectedColour2TextValue = e.target.value;
 })
 
-selectedColourText.addEventListener("blur", () => {
-    let value = selectedColourText.value.trim()
-    if(!value) 
-    {
-        selectedColourText.classList.add("error-input");
-        return;
-    }
-    if(value === selectedColourTextValue) 
-    {
-        selectedColourText.classList.add("error-input");
-        return;
-    }
-    if(!CSS.supports("color", value))
-    {
-        selectedColourText.classList.add("error-input");
-        return;
-    }
-    else
-    {
-        let rgbValue;
-        let hslObj;
-        let hexValue;
-        if(value.startsWith("hsl" || "HSL"))
-        {
-            hslObj = stripHslString(value.toLowerCase())
-            hslObj.colour = `hsl(${Math.round(hslObj.h)},${Math.round(hslObj.s)}%,${Math.round(hslObj.l)}%)`
-            hexValue = hslToHex(hslObj.h,hslObj.s,hslObj.l)
-            rgbValue = hslToRgba(hslObj.h,hslObj.s,hslObj.l)
-        }
-        else if(value.startsWith("#"))
-        {
-            hexValue = value;
-            rgbValue = hexToRgb(value);
-            hslObj = rgbaToHsl(rgbValue);
-        }
-        else if(value.startsWith("rgb" || "RGB"))
-        {
-            rgbValue = value;
-            hslObj = rgbaToHsl(value);
-            hexValue = hslToHex(hslObj.h,hslObj.s,hslObj.l);
-
-        }
-        else
-        {
-            selectedColourText.classList.add("error-input");
-            return;
-        }
-        
-        selectedColours.firstSelected.rgba = rgbValue;
-        selectedColours.firstSelected.hex = hexValue;
-        selectedColours.firstSelected.hsl = hslObj.colour;
-        selectedColours.firstSelected.hue = hslObj.h;
-        selectedColours.firstSelected.sat = hslObj.s;
-        selectedColours.firstSelected.light = hslObj.l;
-        selectedColour.style.backgroundColor = value;
-        selectedColours.activeSelection = "firstSelected"
-        selectedColour.classList.add("activeSelected")
-         if(selectedColour2.classList.contains("activeSelected"))
-        {
-            selectedColour2.classList.remove("activeSelected");
-        }
-        
-        updateColourText()
-        handleColourUpdates(selectedColours.firstSelected.hsl,selectedColours.firstSelected.hue,selectedColours.firstSelected.light,selectedColours.firstSelected.sat, true)
-        allContrastCheckers(selectedColours.activeSelection)
-        selectedColourText.classList.remove("error-input");
-    }
+selectedColourText.addEventListener("blur", (e) => {
+    inputBlurHandler(e.target,selectedColourTextValue,"firstSelected",selectedColour,selectedColour2);
 })
 
-selectedColour2Text.addEventListener("blur", () => {
-    let value = selectedColour2Text.value.trim()
-    if(!value)
-    {
-        selectedColour2Text.classList.add("error-input");
-        return;
-    }
-    if(value === selectedColour2TextValue) return;
-    if(!CSS.supports("color", value))
-    {
-        selectedColour2Text.classList.add("error-input");
-        return;
-    }
-    else
-    {
-        let rgbValue;
-        let hslObj;
-        let hexValue;
-        if(value.startsWith("hsl" || "HSL"))
-        {
-            hslObj = stripHslString(value.toLowerCase())
-            hslObj.colour = `hsl(${Math.round(hslObj.h)},${Math.round(hslObj.s)}%,${Math.round(hslObj.l)}%)`
-            hexValue = hslToHex(hslObj.h,hslObj.s,hslObj.l)
-            rgbValue = hslToRgba(hslObj.h,hslObj.s,hslObj.l)
-        }
-        else if(value.startsWith("#"))
-        {
-            hexValue = value;
-            rgbValue = hexToRgb(value);
-            hslObj = rgbaToHsl(rgbValue);
-        }
-        else if(value.startsWith("rgb" || "RGB"))
-        {
-            rgbValue = value;
-            hslObj = rgbaToHsl(value);
-            hexValue = hslToHex(hslObj.h,hslObj.s,hslObj.l);
-        }
-        else
-        {
-            selectedColour2Text.classList.add("error-input");
-            return
-        }
-        
-        selectedColours.secondSelected.rgba = rgbValue;
-        selectedColours.secondSelected.hex = hexValue;
-        selectedColours.secondSelected.hsl = hslObj.colour;
-        selectedColours.secondSelected.hue = hslObj.h;
-        selectedColours.secondSelected.sat = hslObj.s;
-        selectedColours.secondSelected.light = hslObj.l;
-        selectedColour2.style.backgroundColor = value;
-        selectedColours.activeSelection = "secondSelected"
-        selectedColour2.classList.add("activeSelected")
-        if(selectedColour.classList.contains("activeSelected"))
-        {
-            selectedColour.classList.remove("activeSelected");
-        }
-        debugger
-        
-        updateColourText()
-        handleColourUpdates(selectedColours.secondSelected.hsl,selectedColours.secondSelected.hue,selectedColours.secondSelected.light,selectedColours.secondSelected.sat, true);
-        allContrastCheckers(selectedColours.activeSelection)
-        selectedColour2Text.classList.remove("error-input");
-    }
+selectedColour2Text.addEventListener("blur", (e) => {
+   inputBlurHandler(e.target,selectedColour2TextValue,"secondSelected",selectedColour2,selectedColour);
 })
 
 textForms.forEach((form) => {
@@ -536,7 +410,6 @@ function setSelectedColoursValues(hue,sat,light)
     selectedColours[selectedColours.activeSelection].light = light
     selectedColours[selectedColours.activeSelection].hsl = `hsl(${Math.round(hue)}, ${Math.round(sat)}%, ${Math.round(light)}%)`
     let colourHex = hslToHex(hue,sat,light);
-    ///
     let colourRGBA = hslToRgba(hue,sat,light, 1);
     selectedColours[selectedColours.activeSelection].hex = colourHex
     selectedColours[selectedColours.activeSelection].rgba = colourRGBA
@@ -554,7 +427,6 @@ function updateColourText()
 
 divColourArray.forEach((button) => {
     button.addEventListener("click", (e) => {
-        //ssg
         handleColourClicked(e.target.style.backgroundColor, e.target.dataset.colourId)
         updateInputColour(selectedColours[selectedColours.activeSelection].hex)
     })
@@ -663,7 +535,6 @@ function hslToRgba(h, s, l, a = 1) {
 
 
 function hslToHex(h, s, l) {
-  console.log(h,s,l)
   s /= 100;
   l /= 100;
 
@@ -679,7 +550,6 @@ function hslToHex(h, s, l) {
   else if (h < 240) [r, g, b] = [0, x, c];
   else if (h < 300) [r, g, b] = [x, 0, c];
   else [r, g, b] = [c, 0, x];
-  console.log(r,g,b)
   const toHex = (v) => {
   const raw = (v + m) * 255;
   const rounded = Math.round((raw + Number.EPSILON) * 1e10) / 1e10;
@@ -688,7 +558,6 @@ function hslToHex(h, s, l) {
   };
 
   const hexString = `#${toHex(r)}${toHex(g)}${toHex(b)}`;
-  console.log(hexString)
   return hexString;
 }
 
@@ -758,6 +627,7 @@ function allContrastCheckers(active)
     {
         otherColour = selectedColours.firstSelected.rgba.match(/\d+/g)
     }
+    console.log(mainColour,otherColour)
     let whiteObj = contrastChecker({r:255,g:255,b:255},{r:mainColour[0],g:mainColour[1],b:mainColour[2]})
     let blackObj = contrastChecker({r:0,g:0,b:0},{r:mainColour[0],g:mainColour[1],b:mainColour[2]})
     let otherObj = contrastChecker({r:mainColour[0],g:mainColour[1],b:mainColour[2]},{r:otherColour[0],g:otherColour[1],b:otherColour[2]})
@@ -834,6 +704,76 @@ function getContrastRatio(l1, l2) {
   return (lighter + 0.05) / (darker + 0.05);
 }
 
+function inputBlurHandler(inputText,selectedColourTextValue, selectedInput,colourBlock,colourBlock2)
+{
+    
+    let value = inputText.value.trim()
+    if(!value) 
+    {
+        inputText.classList.add("error-input");
+        return;
+    }
+    if(value === selectedColourTextValue) 
+    {
+        inputText.classList.add("error-input");
+        return;
+    }
+    if(!CSS.supports("color", value))
+    {
+        inputText.classList.add("error-input");
+        return;
+    }
+    else
+    {
+        let rgbValue;
+        let hslObj;
+        let hexValue;
+        if(value.startsWith("hsl" || "HSL"))
+        {
+            hslObj = stripHslString(value.toLowerCase())
+            hslObj.colour = `hsl(${Math.round(hslObj.h)},${Math.round(hslObj.s)}%,${Math.round(hslObj.l)}%)`
+            hexValue = hslToHex(hslObj.h,hslObj.s,hslObj.l)
+            rgbValue = hslToRgba(hslObj.h,hslObj.s,hslObj.l)
+        }
+        else if(value.startsWith("#"))
+        {
+            hexValue = value;
+            rgbValue = hexToRgb(value);
+            hslObj = rgbaToHsl(rgbValue);
+        }
+        else if(value.startsWith("rgb" || "RGB"))
+        {
+            rgbValue = value;
+            hslObj = rgbaToHsl(value);
+            hexValue = hslToHex(hslObj.h,hslObj.s,hslObj.l);
+
+        }
+        else
+        {
+            inputText.classList.add("error-input");
+            return;
+        }
+        
+        selectedColours[selectedInput].rgba = rgbValue;
+        selectedColours[selectedInput].hex = hexValue;
+        selectedColours[selectedInput].hsl = hslObj.colour;
+        selectedColours[selectedInput].hue = hslObj.h;
+        selectedColours[selectedInput].sat = hslObj.s;
+        selectedColours[selectedInput].light = hslObj.l;
+        colourBlock.style.backgroundColor = value;
+        selectedColours.activeSelection = selectedInput;
+        colourBlock.classList.add("activeSelected")
+         if(colourBlock2.classList.contains("activeSelected"))
+        {
+            colourBlock2.classList.remove("activeSelected");
+        }
+        
+        updateColourText()
+        handleColourUpdates(selectedColours[selectedInput].hsl,selectedColours[selectedInput].hue,selectedColours[selectedInput].light,selectedColours[selectedInput].sat, true)
+        allContrastCheckers(selectedColours.activeSelection)
+        inputText.classList.remove("error-input");
+    }
+}
 
 function updateChecker()
 {
