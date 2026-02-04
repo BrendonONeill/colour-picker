@@ -16,6 +16,7 @@
     --main-bg: #343a40;
     --main-ui-colour-darker: #16181b;
     --hover-highlight: #FDFFB4;
+    --active-light: #1bfc06;
 }
 
 body
@@ -149,8 +150,6 @@ canvas
     padding: 0.6rem;
 }
 
-
-
 .selected-container
 {
     display: flex;
@@ -168,8 +167,17 @@ canvas
     background-color: var(--main-bg);
     padding: 0.6rem;
     border-radius: 5px;
-    border: 2px solid white;
     color: white;
+}
+
+.input-selected
+{
+    border: 2px solid white;
+}
+
+.error-input
+{
+    border: 2px solid red;
 }
 
 .grid-main-colour-history
@@ -401,7 +409,7 @@ canvas
 
 .activeSelected
 {
-    border: 5px solid white;
+    border: 5px solid var(--active-light);
 }
 
 .shades-header

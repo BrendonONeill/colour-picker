@@ -104,11 +104,22 @@ selectedColour2Text.addEventListener("focus",(e) => {
 })
 
 selectedColourText.addEventListener("blur", () => {
-    console.log(selectedColourTextValue);
     let value = selectedColourText.value.trim()
-    if(!value) return;
-    if(value === selectedColourTextValue) return;
-    if(!CSS.supports("color", value)){return}
+    if(!value) 
+    {
+        selectedColourText.classList.add("error-input");
+        return;
+    }
+    if(value === selectedColourTextValue) 
+    {
+        selectedColourText.classList.add("error-input");
+        return;
+    }
+    if(!CSS.supports("color", value))
+    {
+        selectedColourText.classList.add("error-input");
+        return;
+    }
     else
     {
         let rgbValue;
@@ -136,7 +147,8 @@ selectedColourText.addEventListener("blur", () => {
         }
         else
         {
-            return
+            selectedColourText.classList.add("error-input");
+            return;
         }
         
         selectedColours.firstSelected.rgba = rgbValue;
@@ -146,19 +158,33 @@ selectedColourText.addEventListener("blur", () => {
         selectedColours.firstSelected.sat = hslObj.s;
         selectedColours.firstSelected.light = hslObj.l;
         selectedColour.style.backgroundColor = value;
-        if(selectedColours.activeSelection === "firstSelected")
+        selectedColours.activeSelection = "firstSelected"
+        selectedColour.classList.add("activeSelected")
+         if(selectedColour2.classList.contains("activeSelected"))
         {
-            updateColourText()
-            handleColourUpdates(selectedColours.firstSelected.hsl,selectedColours.firstSelected.hue,selectedColours.firstSelected.light,selectedColours.firstSelected.sat, true)
+            selectedColour2.classList.remove("activeSelected");
         }
+        
+        updateColourText()
+        handleColourUpdates(selectedColours.firstSelected.hsl,selectedColours.firstSelected.hue,selectedColours.firstSelected.light,selectedColours.firstSelected.sat, true)
+        allContrastCheckers(selectedColours.activeSelection)
+        selectedColourText.classList.remove("error-input");
     }
 })
 
 selectedColour2Text.addEventListener("blur", () => {
     let value = selectedColour2Text.value.trim()
-    if(!value) return;
+    if(!value)
+    {
+        selectedColour2Text.classList.add("error-input");
+        return;
+    }
     if(value === selectedColour2TextValue) return;
-    if(!CSS.supports("color", value)){return}
+    if(!CSS.supports("color", value))
+    {
+        selectedColour2Text.classList.add("error-input");
+        return;
+    }
     else
     {
         let rgbValue;
@@ -185,6 +211,7 @@ selectedColour2Text.addEventListener("blur", () => {
         }
         else
         {
+            selectedColour2Text.classList.add("error-input");
             return
         }
         
@@ -195,11 +222,18 @@ selectedColour2Text.addEventListener("blur", () => {
         selectedColours.secondSelected.sat = hslObj.s;
         selectedColours.secondSelected.light = hslObj.l;
         selectedColour2.style.backgroundColor = value;
-        if(selectedColours.activeSelection === "secondSelected")
+        selectedColours.activeSelection = "secondSelected"
+        selectedColour2.classList.add("activeSelected")
+        if(selectedColour.classList.contains("activeSelected"))
         {
-            updateColourText()
-            handleColourUpdates(selectedColours.secondSelected.hsl,selectedColours.secondSelected.hue,selectedColours.secondSelected.light,selectedColours.secondSelected.sat, true);
+            selectedColour.classList.remove("activeSelected");
         }
+        debugger
+        
+        updateColourText()
+        handleColourUpdates(selectedColours.secondSelected.hsl,selectedColours.secondSelected.hue,selectedColours.secondSelected.light,selectedColours.secondSelected.sat, true);
+        allContrastCheckers(selectedColours.activeSelection)
+        selectedColour2Text.classList.remove("error-input");
     }
 })
 
@@ -286,6 +320,7 @@ canvas.addEventListener("click", (e) => {
    
     handleColourUpdates(color, hue, light, sat, true)
     allContrastCheckers(selectedColours.activeSelection)
+    updateInputColour(selectedColours[selectedColours.activeSelection].hex)
 })
 
 canvas.addEventListener("mouseenter", (e) => {
@@ -519,7 +554,9 @@ function updateColourText()
 
 divColourArray.forEach((button) => {
     button.addEventListener("click", (e) => {
+        //ssg
         handleColourClicked(e.target.style.backgroundColor, e.target.dataset.colourId)
+        updateInputColour(selectedColours[selectedColours.activeSelection].hex)
     })
 })
 
@@ -528,6 +565,7 @@ divShade.forEach((button) => {
     {
         button.addEventListener("click", (e) => {
         handleColourClicked(e.target.style.backgroundColor)
+        updateInputColour(selectedColours[selectedColours.activeSelection].hex)
     })
     }
     
@@ -536,12 +574,14 @@ divShade.forEach((button) => {
 divShadeC.forEach((button) => {
         button.addEventListener("click", (e) => {
         handleColourClicked(e.target.style.backgroundColor)
+        updateInputColour(selectedColours[selectedColours.activeSelection].hex)
     })
 })
 
 divAnaPos.forEach((button) => {
         button.addEventListener("click", (e) => {
         handleColourClicked(e.target.style.backgroundColor)
+        updateInputColour(selectedColours[selectedColours.activeSelection].hex)
     })
 })
 
@@ -550,6 +590,7 @@ divAnaMain.forEach((button) => {
     {
         button.addEventListener("click", (e) => {
         handleColourClicked(e.target.style.backgroundColor)
+        updateInputColour(selectedColours[selectedColours.activeSelection].hex)
     })
     }
     
@@ -558,6 +599,7 @@ divAnaMain.forEach((button) => {
 divAnaNeg.forEach((button) => {
         button.addEventListener("click", (e) => {
         handleColourClicked(e.target.style.backgroundColor)
+        updateInputColour(selectedColours[selectedColours.activeSelection].hex)
     }) 
 })
 
@@ -698,16 +740,23 @@ function rgbaToHsl(rgbaString) {
 
 function allContrastCheckers(active)
 {
-    let mainColour = selectedColours[active].rgba.slice(5).split(", ")
+    let mainColour;
+    let test = selectedColours[active].rgba.toLowerCase()
+    mainColour = selectedColours[active].rgba.match(/\d+/g)
+    if(test.startsWith(!"rgba"))
+    {
+        mainColour.push("1")
+    }
+
     let otherColour;
 
     if(active == "firstSelected")
     {
-        otherColour = selectedColours.secondSelected.rgba.slice(5).split(", ")
+        otherColour = selectedColours.secondSelected.rgba.match(/\d+/g)
     }
     else
     {
-        otherColour = selectedColours.firstSelected.rgba.slice(5).split(", ")
+        otherColour = selectedColours.firstSelected.rgba.match(/\d+/g)
     }
     let whiteObj = contrastChecker({r:255,g:255,b:255},{r:mainColour[0],g:mainColour[1],b:mainColour[2]})
     let blackObj = contrastChecker({r:0,g:0,b:0},{r:mainColour[0],g:mainColour[1],b:mainColour[2]})
@@ -901,6 +950,18 @@ textButtons.forEach((button) => {
     
 })
 
+function updateInputColour(value)
+{
+    if(selectedColours.activeSelection === "firstSelected")
+    {
+        selectedColourText.value = value.toUpperCase()
+    }
+    else
+    {
+        selectedColour2Text.value = value.toUpperCase()
+    }
+}
+
 const testing = [["03045e","0077b6","00b4d8","90e0ef","caf0f8"],["ff99c8","fcf6bd","d0f4de","a9def9","e4c1f9"],["1a535c","4ecdc4","f7fff7","ff6b6b","ffe66d"],["e5d9f2","f5efff","cdc1ff","a594f9","7371fc"],["ef7674","ec5766","da344d","d91e36","c42348"],["000000","66666e","9999a1","e6e6e9","f4f4f6"]]
 
 function generatePalettes(arr)
@@ -926,7 +987,11 @@ function generatePalette(mainContainer, arr)
         colourDiv.classList.add("button-reset", "colour-pal");
         colourDiv.setAttribute('aria-label', `Palette colour #${arr[i]}`);
         colourDiv.style.background =`#${arr[i]}`;
-        colourDiv.addEventListener("click", (e) => handleColourClicked(e.target.style.backgroundColor))
+        colourDiv.addEventListener("click", (e) => 
+            {
+                handleColourClicked(e.target.style.backgroundColor)
+                updateInputColour(selectedColours[selectedColours.activeSelection].hex)
+            })
         colourP.textContent = arr[i].toUpperCase();
         div.append(colourDiv,colourP);
 
