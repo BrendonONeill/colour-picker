@@ -121,19 +121,12 @@ textForms.forEach((form) => {
 
 function createCanvas(light,width,height)
 {
-    let countHor = 0
-    for(let i = 0; i <= 360; i++)
-    {
-        ctx.fillStyle = `hsla(${i}, 100%, ${light}%, 1.00)`;
-        ctx.fillRect(countHor, 0, width, height);
-        let countVert = height;
-        for(let j = 99; j >= 0; j--)
-        {
-            ctx.fillStyle = `hsla(${i}, ${j}%, ${light}%, 1.00)`;
-            ctx.fillRect(countHor, countVert, width, height);
-            countVert = countVert + height;
+    for (let i = 0; i <= 360; i++) {
+        for (let j = 100; j >= 0; j--) {
+            ctx.fillStyle = `hsl(${i}, ${j}%, ${light}%)`;
+            // Draw at fixed coordinates
+            ctx.fillRect(i * 2, (100 - j) * 5, 2, 5);
         }
-        countHor = countHor + width;
     }
 }
 
@@ -143,7 +136,6 @@ if(window.screen.width > 710)
     canvas.style.height = "500px";
     canvasWidth = 720
     canvasHeight = 500
-    createCanvas(light,2,5)
 }
 else
 {
@@ -151,8 +143,9 @@ else
     canvas.style.height = "250px";
     canvasWidth = 360
     canvasHeight = 250
-    createCanvas(light,2,5)
 }
+
+loadCanvasFromCache()
 
 
 canvas.addEventListener("mousemove", (e) => {
@@ -943,3 +936,39 @@ function generatePalette(mainContainer, arr)
 
 generatePalettes(testing)
 
+
+async function saveCanvasToCache() {
+  const blob = await new Promise((resolve) => canvas.toBlob(resolve));
+  // Use a simple key-value store (like the 'idb' library) 
+  // or standard IndexedDB to save this blob.
+  const request = indexedDB.open("ColorPickerDB", 1);
+  request.onupgradeneeded = (e) => e.target.result.createObjectStore("cache");
+  request.onsuccess = (e) => {
+    const db = e.target.result;
+    db.transaction("cache", "readwrite").objectStore("cache").put(blob, "hueMap");
+  };
+}
+
+async function loadCanvasFromCache() {
+  const request = indexedDB.open("ColorPickerDB", 1);
+  request.onsuccess = (e) => {
+    const db = e.target.result;
+    const getRequest = db.transaction("cache").objectStore("cache").get("hueMap");
+    
+    getRequest.onsuccess = async () => {
+      const blob = getRequest.result;
+      if (!blob) {
+        createCanvas(light);
+        saveCanvasToCache()
+        return;
+      }
+      
+      // Create a high-performance bitmap from the blob
+      const bitmap = await createImageBitmap(blob);
+      ctx.drawImage(bitmap, 0, 0);
+      console.log("Canvas restored and interactive");
+    };
+  };
+}
+
+loadCanvasFromCache()
