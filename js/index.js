@@ -937,38 +937,38 @@ function generatePalette(mainContainer, arr)
 generatePalettes(testing)
 
 
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open("ColorPickerDB", 1);
+    request.onupgradeneeded = (e) =>
+      e.target.result.createObjectStore("cache");
+    request.onsuccess = (e) => resolve(e.target.result);
+    request.onerror = (e) => reject(e.target.error);
+  });
+}
+
 async function saveCanvasToCache() {
   const blob = await new Promise((resolve) => canvas.toBlob(resolve));
-  // Use a simple key-value store (like the 'idb' library) 
-  // or standard IndexedDB to save this blob.
-  const request = indexedDB.open("ColorPickerDB", 1);
-  request.onupgradeneeded = (e) => e.target.result.createObjectStore("cache");
-  request.onsuccess = (e) => {
-    const db = e.target.result;
-    db.transaction("cache", "readwrite").objectStore("cache").put(blob, "hueMap");
-  };
+  const db = await openDB();
+  db.transaction("cache", "readwrite").objectStore("cache").put(blob, "hueMap");
 }
 
 async function loadCanvasFromCache() {
-  const request = indexedDB.open("ColorPickerDB", 1);
-  request.onsuccess = (e) => {
-    const db = e.target.result;
-    const getRequest = db.transaction("cache").objectStore("cache").get("hueMap");
-    
-    getRequest.onsuccess = async () => {
-      const blob = getRequest.result;
-      if (!blob) {
-        createCanvas(light);
-        saveCanvasToCache()
-        return;
-      }
-      
-      // Create a high-performance bitmap from the blob
-      const bitmap = await createImageBitmap(blob);
-      ctx.drawImage(bitmap, 0, 0);
-      console.log("Canvas restored and interactive");
-    };
+  const db = await openDB();
+  const getRequest = db
+    .transaction("cache")
+    .objectStore("cache")
+    .get("hueMap");
+
+  getRequest.onsuccess = async () => {
+    const blob = getRequest.result;
+    if (!blob) {
+      createCanvas(light);
+      saveCanvasToCache();
+      return;
+    }
+    const bitmap = await createImageBitmap(blob);
+    ctx.drawImage(bitmap, 0, 0);
+    console.log("Canvas restored and interactive");
   };
 }
-
-loadCanvasFromCache()
