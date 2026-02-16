@@ -57,7 +57,17 @@ let pendingUpdate = false
 
 
 let light = 50;
-const colourArray = new Array(10).fill(null)
+const colourArray = colourArrayLoad()
+
+function colourArrayLoad()
+{
+    const stored = localStorage.getItem('colours');
+    if(stored === null)
+    {
+       return new Array(10).fill(null)
+    }
+    return JSON.parse(stored);
+}
 
 let selectedColours = {
     firstSelected : {hue: 0, light: 0, sat: 0, hsl:"hsl(0 0% 0%)", hex:"#000000", rgba:"rgba(0, 0, 0, 1)",contrast:{white:{aaNormal:null,aaaNormal:null,aaLarge:null,aaaLarge:null},black:{aaNormal:null,aaaNormal:null,aaLarge:null,aaaLarge:null},other:{aaNormal:null,aaaNormal:null,aaLarge:null,aaaLarge:null}}},
@@ -232,6 +242,7 @@ function updateColourArray(colour)
     {
         colourArray[0] = colour
         updateDivColour()
+        updateColourArrayMemory()
         return
     }
     let nullInArray= false;
@@ -260,6 +271,7 @@ function updateColourArray(colour)
             }
         }
         updateDivColour()
+        updateColourArrayMemory()
         return
     }
     else
@@ -277,7 +289,13 @@ function updateColourArray(colour)
             }
         }
         updateDivColour()
+        updateColourArrayMemory()
     }
+}
+
+function updateColourArrayMemory()
+{
+  localStorage.setItem('colours', JSON.stringify(colourArray));
 }
 
 function updateColourArrayPart2(num)
@@ -296,6 +314,7 @@ function updateColourArrayPart2(num)
         }
     }
     updateDivColour()
+    updateColourArrayMemory()
 }
 
 
@@ -612,7 +631,6 @@ function allContrastCheckers(active)
     {
         otherColour = selectedColours.firstSelected.rgba.match(/\d+/g)
     }
-    console.log(mainColour,otherColour)
     let whiteObj = contrastChecker({r:255,g:255,b:255},{r:mainColour[0],g:mainColour[1],b:mainColour[2]})
     let blackObj = contrastChecker({r:0,g:0,b:0},{r:mainColour[0],g:mainColour[1],b:mainColour[2]})
     let otherObj = contrastChecker({r:mainColour[0],g:mainColour[1],b:mainColour[2]},{r:otherColour[0],g:otherColour[1],b:otherColour[2]})
@@ -639,11 +657,7 @@ function contrastChecker(textColour, backgroundColour)
 {
     const text = getLuminance(textColour.r,textColour.g,textColour.b);
     const background = getLuminance(backgroundColour.r,backgroundColour.g,backgroundColour.b);
-
-    console.log(text,background)
-
     const ratio = getContrastRatio(text,background);
-    console.log(ratio)
     
     let results = {AANormal:null,AAANormal:null,AALarge:null,AAALarge:null}
         if(ratio >= 4.5)
@@ -917,6 +931,7 @@ function generatePalette(mainContainer, arr)
         colourDiv.style.background =`#${arr[i]}`;
         colourDiv.addEventListener("click", (e) => 
             {
+                debugger
                 handleColourClicked(e.target.style.backgroundColor)
                 updateInputColour(selectedColours[selectedColours.activeSelection].hex)
             })
@@ -964,6 +979,27 @@ async function loadCanvasFromCache() {
     }
     const bitmap = await createImageBitmap(blob);
     ctx.drawImage(bitmap, 0, 0);
-    console.log("Canvas restored and interactive");
+    console.log("Canvas restored");
   };
 }
+
+function onStart()
+{
+    if(colourArray[0] !== null)
+    {
+        for (let i = 0; i < colourArray.length; i++) {
+            if(colourArray[i] === null) continue
+            if(CSS.supports("color", colourArray[i]))
+            {
+                divColourArray[i].style.background = colourArray[i]
+            }
+            if(i == 0)
+            {
+                divColourArray[i].click()
+            }
+        }
+
+    }
+}
+
+onStart()
