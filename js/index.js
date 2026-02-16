@@ -14,6 +14,10 @@ const divAnaPos = document.querySelectorAll('.ana-pick-pos');
 const divAnaMain = document.querySelectorAll('.ana-pick-main');
 const divAnaNeg = document.querySelectorAll('.ana-pick-neg');
 
+const divMonoPos = document.querySelectorAll('.mono-pick-pos');
+const divMonoMain = document.querySelectorAll('.mono-pick-main');
+const divMonoNeg = document.querySelectorAll('.mono-pick-neg');
+
 const hoverColour = document.querySelector(".hover-colour");
 const colourpasteHSL = document.querySelector(".colour-paste-hsl");
 const colourpasteHEX = document.querySelector(".colour-paste-hex");
@@ -359,6 +363,19 @@ function complementaryHSL(h) {
   return compH;
 }
 
+function MonochromaticHSL(h,s,l)
+{
+    const arrHSL = [];
+    let darkSat = s - 25;
+    let darkLight = l - 14
+    arrHSL.push({hue:h,sat: darkSat,light: darkLight,divs:divMonoNeg})
+    arrHSL.push({hue:h,sat:s,light:l,divs:divMonoMain})
+    let lightSat = s + 30;
+    let lighterLight = l + 14
+    arrHSL.push({hue:h,sat:lightSat,light:lighterLight,divs:divMonoPos})
+    return arrHSL;
+}
+
 
 function AnalogousHSLArray(h)
 {
@@ -379,10 +396,14 @@ function AnalogousHSLArray(h)
 
 function handleColourUpdates(colour, hue, light, sat, updateArray,part2 = null)
 {
-    let complementaryHue  = complementaryHSL(hue)
-    let analogousArray = AnalogousHSLArray(hue)
-    updateShadeArray(sat,Number(light),[divShade,divShadeC],[hue,complementaryHue])
-    updateShadeArray(sat,Number(light),[divAnaPos,divAnaMain,divAnaNeg],analogousArray)
+    let complementaryHue  = complementaryHSL(hue);
+    let analogousArray = AnalogousHSLArray(hue);
+    let monoArray = MonochromaticHSL(hue,sat,Number(light));
+    updateShadeArray(sat,Number(light),[divShade,divShadeC],[hue,complementaryHue]);
+    updateShadeArray(sat,Number(light),[divAnaPos,divAnaMain,divAnaNeg],analogousArray);
+    for (let i = 0; i < monoArray.length; i++) {
+        updateShadeArray(monoArray[i].sat,Number(monoArray[i].light),[monoArray[i].divs],[monoArray[i].hue]);
+    }
     if(updateArray)
     {
         if(part2 !== null)
@@ -425,7 +446,10 @@ divColourArray.forEach((button) => {
     })
 })
 
-divShade.forEach((button) => {
+
+let handleDivClicksArray = [...divShade,...divShadeC,...divAnaPos,...divAnaMain,...divAnaNeg,...divMonoPos,...divMonoMain,...divMonoNeg]
+
+handleDivClicksArray.forEach((button) => {
     if(!button.classList.contains("main"))
     {
         button.addEventListener("click", (e) => {
@@ -434,38 +458,6 @@ divShade.forEach((button) => {
     })
     }
     
-})
-
-divShadeC.forEach((button) => {
-        button.addEventListener("click", (e) => {
-        handleColourClicked(e.target.style.backgroundColor)
-        updateInputColour(selectedColours[selectedColours.activeSelection].hex)
-    })
-})
-
-divAnaPos.forEach((button) => {
-        button.addEventListener("click", (e) => {
-        handleColourClicked(e.target.style.backgroundColor)
-        updateInputColour(selectedColours[selectedColours.activeSelection].hex)
-    })
-})
-
-divAnaMain.forEach((button) => {
-    if(!button.classList.contains("main"))
-    {
-        button.addEventListener("click", (e) => {
-        handleColourClicked(e.target.style.backgroundColor)
-        updateInputColour(selectedColours[selectedColours.activeSelection].hex)
-    })
-    }
-    
-})
-
-divAnaNeg.forEach((button) => {
-        button.addEventListener("click", (e) => {
-        handleColourClicked(e.target.style.backgroundColor)
-        updateInputColour(selectedColours[selectedColours.activeSelection].hex)
-    }) 
 })
 
 function handleColourClicked(rgba,colourId=null)
@@ -648,7 +640,10 @@ function contrastChecker(textColour, backgroundColour)
     const text = getLuminance(textColour.r,textColour.g,textColour.b);
     const background = getLuminance(backgroundColour.r,backgroundColour.g,backgroundColour.b);
 
+    console.log(text,background)
+
     const ratio = getContrastRatio(text,background);
+    console.log(ratio)
     
     let results = {AANormal:null,AAANormal:null,AALarge:null,AAALarge:null}
         if(ratio >= 4.5)
