@@ -123,7 +123,7 @@ textForms.forEach((form) => {
 
 
 
-function createCanvas(light,width,height)
+function createCanvas(light)
 {
     for (let i = 0; i <= 360; i++) {
         for (let j = 100; j >= 0; j--) {
@@ -134,7 +134,7 @@ function createCanvas(light,width,height)
     }
 }
 
-if(window.screen.width > 710)
+if(window.screen.width > 768)
 {
     canvas.style.width = "720px";
     canvas.style.height = "500px";
