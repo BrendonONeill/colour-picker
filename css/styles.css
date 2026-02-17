@@ -633,6 +633,7 @@ canvas
     height: 120px;
     background-color: var(--main-ui-colour-darker);
     display: flex;
+    justify-content: center;
     border-radius: 5px;
     padding: 0.4rem;
 
@@ -671,11 +672,22 @@ canvas
 
 .colour-pal
 {
-    width: 65px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
     border-radius: 5px;
 }
 
+@media (min-width: 1800px) {
+    .grid
+{
+    padding: 1.2rem;
+    margin: auto;
+    width: 80%;
+    display: grid;
+    grid-template-rows: repeat(60, 25px);
+    grid-template-columns: repeat(60, 25px);
+}
+}
 @media (max-width: 1200px) {
 .grid
 {
@@ -924,7 +936,6 @@ canvas
     width: 400px;
     column-gap: 0.2rem;
     height: 120px;
-
 }
 
 .palette-colour-container
