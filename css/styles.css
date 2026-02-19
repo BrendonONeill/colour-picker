@@ -688,11 +688,13 @@ canvas
     grid-template-columns: repeat(60, 25px);
 }
 }
-@media (max-width: 1200px) {
+
+@media (max-width: 1300px) {
 .grid
 {
     padding: 1.2rem;
-    width: 100%;
+    width: 80%;
+    margin: auto;
     display: grid;
     grid-template-rows: repeat(125, 25px);
     grid-template-columns: repeat(60, 25px);
@@ -784,12 +786,25 @@ canvas
 
 }
 
-@media (max-width: 768px){
+@media (max-width: 950px) {
 
 .grid
 {
     padding: 1.2rem;
     width: 100%;
+    display: grid;
+    grid-template-rows: repeat(125, 25px);
+    grid-template-columns: repeat(60, 25px);
+}
+}
+
+@media (max-width: 768px){
+
+.grid
+{
+    padding: 1.2rem;
+    width: 50%;
+    margin: auto;
     grid-template-rows: repeat(125, 25px);
     grid-template-columns: repeat(15, 25px);
     border-radius: 5px;
@@ -953,6 +968,18 @@ canvas
 }
 
  }
+
+@media (max-width: 600px){
+
+.grid
+{
+    padding: 1.2rem;
+    width: 100%;
+    grid-template-rows: repeat(125, 25px);
+    grid-template-columns: repeat(15, 25px);
+    border-radius: 5px;
+}
+}
 
 @media (max-width: 400px){
 
