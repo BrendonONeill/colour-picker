@@ -18,6 +18,19 @@ const divMonoPos = document.querySelectorAll('.mono-pick-pos');
 const divMonoMain = document.querySelectorAll('.mono-pick-main');
 const divMonoNeg = document.querySelectorAll('.mono-pick-neg');
 
+const divSplitCompMain = document.querySelectorAll('.split-pick-main');
+const divSplitCompFirst = document.querySelectorAll('.split-pick-first');
+const divSplitCompSecond = document.querySelectorAll('.split-pick-second');
+
+const divTriadMain = document.querySelectorAll('.triad-pick-main');
+const divTriadFirst = document.querySelectorAll('.triad-pick-first');
+const divTriadSecond = document.querySelectorAll('.triad-pick-second');
+
+const divSquareMain = document.querySelectorAll('.square-pick-main');
+const divSquareFirst = document.querySelectorAll('.square-pick-first');
+const divSquareSecond = document.querySelectorAll('.square-pick-second');
+const divSquareThird = document.querySelectorAll('.square-pick-third');
+
 const hoverColour = document.querySelector(".hover-colour");
 const colourpasteHSL = document.querySelector(".colour-paste-hsl");
 const colourpasteHEX = document.querySelector(".colour-paste-hex");
@@ -395,6 +408,38 @@ function MonochromaticHSL(h,s,l)
     return arrHSL;
 }
 
+function splitComplementaryHSL(h,s,l,arrHSL)
+{
+    const firstHue = (h + 150) % 360;
+    const secondHue = (h + 210) % 360;
+    arrHSL.push({hue:h,sat:s,light:l,divs:divSplitCompMain});
+    arrHSL.push({hue:firstHue,sat:s,light:l,divs:divSplitCompFirst});
+    arrHSL.push({hue:secondHue,sat:s,light:l,divs:divSplitCompSecond});
+    return arrHSL;
+}
+
+function triadHSL(h,s,l,arrHSL)
+{
+    const firstHue = (h + 120) % 360;
+    const secondHue = (h + 240) % 360;
+    arrHSL.push({hue:h,sat:s,light:l,divs:divTriadMain});
+    arrHSL.push({hue:firstHue,sat:s,light:l,divs:divTriadFirst});
+    arrHSL.push({hue:secondHue,sat:s,light:l,divs:divTriadSecond});
+    return arrHSL;
+}
+
+function squareHSL(h,s,l,arrHSL)
+{
+    const firstHue = (h + 90) % 360;
+    const secondHue = (h + 180) % 360;
+    const thirdHue = (h + 270) % 360;
+    arrHSL.push({hue:h,sat:s,light:l,divs:divSquareMain});
+    arrHSL.push({hue:firstHue,sat:s,light:l,divs:divSquareFirst});
+    arrHSL.push({hue:secondHue,sat:s,light:l,divs:divSquareSecond});
+    arrHSL.push({hue:thirdHue,sat:s,light:l,divs:divSquareThird});
+    return arrHSL;
+}
+
 
 function AnalogousHSLArray(h)
 {
@@ -417,11 +462,15 @@ function handleColourUpdates(colour, hue, light, sat, updateArray,part2 = null)
 {
     let complementaryHue  = complementaryHSL(hue);
     let analogousArray = AnalogousHSLArray(hue);
-    let monoArray = MonochromaticHSL(hue,sat,Number(light));
+    let test = MonochromaticHSL(hue,sat,Number(light));
+    splitComplementaryHSL(hue,sat,Number(light),test);
+    triadHSL(hue,sat,Number(light),test);
+    squareHSL(hue,sat,Number(light),test);
     updateShadeArray(sat,Number(light),[divShade,divShadeC],[hue,complementaryHue]);
     updateShadeArray(sat,Number(light),[divAnaPos,divAnaMain,divAnaNeg],analogousArray);
-    for (let i = 0; i < monoArray.length; i++) {
-        updateShadeArray(monoArray[i].sat,Number(monoArray[i].light),[monoArray[i].divs],[monoArray[i].hue]);
+    for (let i = 0; i < test.length; i++) {
+        updateShadeArray(test[i].sat,test[i].light,[test[i].divs],[test[i].hue]);
+        
     }
     if(updateArray)
     {
@@ -466,7 +515,7 @@ divColourArray.forEach((button) => {
 })
 
 
-let handleDivClicksArray = [...divShade,...divShadeC,...divAnaPos,...divAnaMain,...divAnaNeg,...divMonoPos,...divMonoMain,...divMonoNeg]
+let handleDivClicksArray = document.querySelectorAll(".shade-button")
 
 handleDivClicksArray.forEach((button) => {
     if(!button.classList.contains("main"))
@@ -717,7 +766,6 @@ function inputBlurHandler(inputText,selectedColourTextValue, selectedInput,colou
     }
     if(value === selectedColourTextValue) 
     {
-        inputText.classList.add("error-input");
         return;
     }
     if(!CSS.supports("color", value))
@@ -904,7 +952,17 @@ function updateInputColour(value)
     }
 }
 
-const testing = [["03045e","0077b6","00b4d8","90e0ef","caf0f8"],["ff99c8","fcf6bd","d0f4de","a9def9","e4c1f9"],["1a535c","4ecdc4","f7fff7","ff6b6b","ffe66d"],["e5d9f2","f5efff","cdc1ff","a594f9","7371fc"],["ef7674","ec5766","da344d","d91e36","c42348"],["000000","66666e","9999a1","e6e6e9","f4f4f6"]]
+const testing = 
+[
+    ["b9b5ff","c4baff","cebeff","d8c2ff","e2c6ff"],
+    ["d1faff","9bd1e5","6a8eae","57a773","157145"],
+    ["16181b","212529","343a40","4777A7","ABCEF0"],
+    ["03045e","0077b6","00b4d8","90e0ef","caf0f8"],
+    ["ff99c8","fcf6bd","d0f4de","a9def9","e4c1f9"],
+    ["1a535c","4ecdc4","f7fff7","ff6b6b","ffe66d"],
+    ["e5d9f2","f5efff","cdc1ff","a594f9","7371fc"],
+    ["ef7674","ec5766","da344d","d91e36","c42348"],
+    ["000000","66666e","9999a1","e6e6e9","f4f4f6"]]
 
 function generatePalettes(arr)
 {
