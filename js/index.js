@@ -18,6 +18,19 @@ const divMonoPos = document.querySelectorAll('.mono-pick-pos');
 const divMonoMain = document.querySelectorAll('.mono-pick-main');
 const divMonoNeg = document.querySelectorAll('.mono-pick-neg');
 
+const divSplitCompMain = document.querySelectorAll('.split-pick-main');
+const divSplitCompFirst = document.querySelectorAll('.split-pick-first');
+const divSplitCompSecond = document.querySelectorAll('.split-pick-second');
+
+const divTriadMain = document.querySelectorAll('.triad-pick-main');
+const divTriadFirst = document.querySelectorAll('.triad-pick-first');
+const divTriadSecond = document.querySelectorAll('.triad-pick-second');
+
+const divSquareMain = document.querySelectorAll('.square-pick-main');
+const divSquareFirst = document.querySelectorAll('.square-pick-first');
+const divSquareSecond = document.querySelectorAll('.square-pick-second');
+const divSquareThird = document.querySelectorAll('.square-pick-third');
+
 const hoverColour = document.querySelector(".hover-colour");
 const colourpasteHSL = document.querySelector(".colour-paste-hsl");
 const colourpasteHEX = document.querySelector(".colour-paste-hex");
@@ -395,6 +408,38 @@ function MonochromaticHSL(h,s,l)
     return arrHSL;
 }
 
+function splitComplementaryHSL(h,s,l,arrHSL)
+{
+    const firstHue = (h + 150) % 360;
+    const secondHue = (h + 210) % 360;
+    arrHSL.push({hue:h,sat:s,light:l,divs:divSplitCompMain});
+    arrHSL.push({hue:firstHue,sat:s,light:l,divs:divSplitCompFirst});
+    arrHSL.push({hue:secondHue,sat:s,light:l,divs:divSplitCompSecond});
+    return arrHSL;
+}
+
+function triadHSL(h,s,l,arrHSL)
+{
+    const firstHue = (h + 120) % 360;
+    const secondHue = (h + 240) % 360;
+    arrHSL.push({hue:h,sat:s,light:l,divs:divTriadMain});
+    arrHSL.push({hue:firstHue,sat:s,light:l,divs:divTriadFirst});
+    arrHSL.push({hue:secondHue,sat:s,light:l,divs:divTriadSecond});
+    return arrHSL;
+}
+
+function squareHSL(h,s,l,arrHSL)
+{
+    const firstHue = (h + 90) % 360;
+    const secondHue = (h + 180) % 360;
+    const thirdHue = (h + 270) % 360;
+    arrHSL.push({hue:h,sat:s,light:l,divs:divSquareMain});
+    arrHSL.push({hue:firstHue,sat:s,light:l,divs:divSquareFirst});
+    arrHSL.push({hue:secondHue,sat:s,light:l,divs:divSquareSecond});
+    arrHSL.push({hue:thirdHue,sat:s,light:l,divs:divSquareThird});
+    return arrHSL;
+}
+
 
 function AnalogousHSLArray(h)
 {
@@ -417,11 +462,15 @@ function handleColourUpdates(colour, hue, light, sat, updateArray,part2 = null)
 {
     let complementaryHue  = complementaryHSL(hue);
     let analogousArray = AnalogousHSLArray(hue);
-    let monoArray = MonochromaticHSL(hue,sat,Number(light));
+    let test = MonochromaticHSL(hue,sat,Number(light));
+    splitComplementaryHSL(hue,sat,Number(light),test);
+    triadHSL(hue,sat,Number(light),test);
+    squareHSL(hue,sat,Number(light),test);
     updateShadeArray(sat,Number(light),[divShade,divShadeC],[hue,complementaryHue]);
     updateShadeArray(sat,Number(light),[divAnaPos,divAnaMain,divAnaNeg],analogousArray);
-    for (let i = 0; i < monoArray.length; i++) {
-        updateShadeArray(monoArray[i].sat,Number(monoArray[i].light),[monoArray[i].divs],[monoArray[i].hue]);
+    for (let i = 0; i < test.length; i++) {
+        updateShadeArray(test[i].sat,test[i].light,[test[i].divs],[test[i].hue]);
+        
     }
     if(updateArray)
     {
@@ -466,7 +515,7 @@ divColourArray.forEach((button) => {
 })
 
 
-let handleDivClicksArray = [...divShade,...divShadeC,...divAnaPos,...divAnaMain,...divAnaNeg,...divMonoPos,...divMonoMain,...divMonoNeg]
+let handleDivClicksArray = document.querySelectorAll(".shade-button")
 
 handleDivClicksArray.forEach((button) => {
     if(!button.classList.contains("main"))
