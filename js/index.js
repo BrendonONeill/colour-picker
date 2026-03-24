@@ -766,7 +766,6 @@ function inputBlurHandler(inputText,selectedColourTextValue, selectedInput,colou
     }
     if(value === selectedColourTextValue) 
     {
-        inputText.classList.add("error-input");
         return;
     }
     if(!CSS.supports("color", value))
@@ -953,7 +952,17 @@ function updateInputColour(value)
     }
 }
 
-const testing = [["03045e","0077b6","00b4d8","90e0ef","caf0f8"],["ff99c8","fcf6bd","d0f4de","a9def9","e4c1f9"],["1a535c","4ecdc4","f7fff7","ff6b6b","ffe66d"],["e5d9f2","f5efff","cdc1ff","a594f9","7371fc"],["ef7674","ec5766","da344d","d91e36","c42348"],["000000","66666e","9999a1","e6e6e9","f4f4f6"]]
+const testing = 
+[
+    ["b9b5ff","c4baff","cebeff","d8c2ff","e2c6ff"],
+    ["d1faff","9bd1e5","6a8eae","57a773","157145"],
+    ["16181b","212529","343a40","4777A7","ABCEF0"],
+    ["03045e","0077b6","00b4d8","90e0ef","caf0f8"],
+    ["ff99c8","fcf6bd","d0f4de","a9def9","e4c1f9"],
+    ["1a535c","4ecdc4","f7fff7","ff6b6b","ffe66d"],
+    ["e5d9f2","f5efff","cdc1ff","a594f9","7371fc"],
+    ["ef7674","ec5766","da344d","d91e36","c42348"],
+    ["000000","66666e","9999a1","e6e6e9","f4f4f6"]]
 
 function generatePalettes(arr)
 {
