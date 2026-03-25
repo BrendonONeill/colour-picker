@@ -519,7 +519,7 @@ canvas
     border-radius: 5px;
     border: 2px solid white;
     margin-top: 0.4rem;
-    width: 80%;
+    width: 85%;
     color: white;
 }
 
@@ -539,7 +539,7 @@ canvas
     
     background-color: var(--main-ui-colour);
     color: white;
-    padding: 0.8rem;
+    padding: 0.8rem 0.8rem 0.8rem 1.45rem;
     gap: 0.8rem;
     border-radius: 0 0 5px 5px;
     box-shadow: rgba(26, 29, 32, 0.78).95px 1.95px 2.6px;
@@ -573,8 +573,7 @@ canvas
     grid-row: 1/21;
     grid-column: 45/60;
     border-radius: 5px;
-    padding: 1rem;
-
+    padding: 1.45rem;
     display: grid;
     grid-template-rows: repeat(25, 1fr);
     grid-template-columns: repeat(5,1fr);
