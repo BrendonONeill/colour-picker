@@ -305,7 +305,7 @@ canvas
 .analogous-shades
 {
     grid-row: 4/6;
-    grid-column: 17/25;
+    grid-column: 18/26;
 }
 
 .analogous-shades p 
@@ -316,26 +316,26 @@ canvas
 .shades-ana-pos
 {
     grid-row: 6/9;
-    grid-column: 17/32;
+    grid-column: 18/33;
     border-radius: 0 5px 0 0;
 }
 .shades-ana-main
 {
     grid-row: 9/12;
-    grid-column: 17/32;
+    grid-column: 18/33;
     border-radius: 0;
 }
 .shades-ana-neg
 {
     grid-row: 12/15;
-    grid-column: 17/32;
+    grid-column: 18/33;
     border-radius: 0 0 5px 5px;
 }
 
 .mono-shades
 {
     grid-row: 4/6;
-    grid-column: 33/42;
+    grid-column: 35/44;
 }
 
 .mono-shades p 
@@ -346,21 +346,21 @@ canvas
 .shades-mono-pos
 {
     grid-row: 6/9;
-    grid-column: 33/48;
+    grid-column: 35/50;
     border-radius: 0 5px 0 0;
 }
 
 .shades-mono-main
 {
     grid-row: 9/12;
-    grid-column: 33/48;
+    grid-column: 35/50;
     border-radius: 0 0 0 0;
 }
 
 .shades-mono-neg
 {
     grid-row: 12/15;
-    grid-column: 33/48;
+    grid-column: 35/50;
     border-radius: 0 0 5px 5px;
 }
 
@@ -399,7 +399,7 @@ canvas
 .triad-shades
 {
     grid-row: 16/18;
-    grid-column: 17/22;
+    grid-column: 18/24;
 }
 
 .triad-shades p
@@ -410,28 +410,28 @@ canvas
 .triad-main
 {
     grid-row: 18/21;
-    grid-column: 17/32;
+    grid-column: 18/33;
     border-radius: 0 5px 0 0;
 }
 
 .triad-first
 {
     grid-row: 21/24;
-    grid-column: 17/32;
+    grid-column: 18/33;
     border-radius: 0;
 }
 
 .triad-second
 {
     grid-row: 24/27;
-    grid-column: 17/32;
+    grid-column: 18/33;
     border-radius: 0 0 5px 5px;
 }
 
 .square-shades
 {
     grid-row: 16/18;
-    grid-column: 33/40;
+    grid-column: 35/42;
 }
 
 .square-shades p
@@ -442,28 +442,28 @@ canvas
 .square-main
 {
     grid-row: 18/21;
-    grid-column: 33/48;
+    grid-column: 35/50;
     border-radius: 0 5px 0 0;
 }
 
 .square-first
 {
     grid-row: 21/24;
-    grid-column: 33/48;
+    grid-column: 35/50;
     border-radius: 0;
 }
 
 .square-second
 {
     grid-row: 24/27;
-    grid-column: 33/48;
+    grid-column: 35/50;
     border-radius: 0;
 }
 
 .square-third
 {
     grid-row: 27/30;
-    grid-column: 33/48;
+    grid-column: 35/50;
     border-radius: 0 0 5px 5px;
 }
 
@@ -789,7 +789,7 @@ canvas
     width: 80%;
     margin: auto;
     display: grid;
-    grid-template-rows: repeat(158, 25px);
+    grid-template-rows: repeat(175, 25px);
     grid-template-columns: repeat(60, 25px);
 }
 
@@ -836,6 +836,26 @@ canvas
     grid-column: 1/32;
     grid-template-rows: repeat(42, 25px);
     grid-template-columns: repeat(75, 25px);
+}
+
+.analogous-shades
+{
+    
+    grid-column: 17/25;
+}
+
+
+.shades-ana-pos
+{
+    grid-column: 17/32;
+}
+.shades-ana-main
+{
+    grid-column: 17/32;
+}
+.shades-ana-neg
+{
+    grid-column: 17/32;
 }
 
 .mono-shades
@@ -958,7 +978,7 @@ canvas
 
 .palettes-container
 {
-    grid-row: 101/135;
+    grid-row: 101/150;
     grid-column: 5/28;
     display: flex;
     justify-content: center;
@@ -974,7 +994,7 @@ canvas
     padding: 1.2rem;
     width: 100%;
     display: grid;
-    grid-template-rows: repeat(152, 25px);
+    grid-template-rows: repeat(168, 25px);
     grid-template-columns: repeat(60, 25px);
 }
 } 
@@ -986,7 +1006,7 @@ canvas
     padding: 1.2rem;
     width: 50%;
     margin: auto;
-    grid-template-rows: repeat(188, 25px);
+    grid-template-rows: repeat(202, 25px);
     grid-template-columns: repeat(15, 25px);
     border-radius: 5px;
 }
@@ -1211,7 +1231,7 @@ canvas
 
 .palettes-container
 {
-    grid-row: 143/177;
+    grid-row: 143/194;
     grid-column: 1/16;
 }
 
