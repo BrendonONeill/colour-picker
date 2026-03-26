@@ -66,6 +66,16 @@ const otherAAALarge = document.getElementById('o-aaal');
 const textButtons = document.querySelectorAll(".text-button");
 const tabCopy = document.querySelector(".tab");
 
+const hslBox = document.getElementById("hue-box");
+const hslBoxText = document.getElementById("hue-box-text");
+const hslSliderHue = document.getElementById("hue-hsl-range");
+const hslSliderSat = document.getElementById("sat-hsl-range");
+const hslSliderLight = document.getElementById("light-hsl-range");
+const hslTextHue = document.getElementById("hue-hsl-text");
+const hslTextSat = document.getElementById("sat-hsl-text");
+const hslTextLight = document.getElementById("light-hsl-text");
+
+
 let pendingUpdate = false
 
 
@@ -951,6 +961,39 @@ function updateInputColour(value)
         selectedColour2Text.value = value.toUpperCase()
     }
 }
+const hslBoxValues = {h:0,s:50,l:50}
+function updateHSLBox(value,type)
+{
+    if(type == 'hue')
+    {
+        hslBoxValues.h = value;
+        hslTextHue.value = value;
+        hslSliderHue.value = value;
+    }
+    if(type == 'sat')
+    {
+        hslBoxValues.s = value;
+        hslTextSat.value = value;
+        hslSliderSat.value = value;
+    }
+    if(type == 'light')
+    {
+        hslBoxValues.l = value;
+        hslTextLight.value = value;
+        hslSliderLight.value = value;
+    }
+
+    hslBox.style.backgroundColor = `hsl(${hslBoxValues.h},${hslBoxValues.s}%,${hslBoxValues.l}%)`
+    hslBoxText.textContent = `hsl(${hslBoxValues.h},${hslBoxValues.s}%,${hslBoxValues.l}%)`
+}
+
+hslSliderHue.addEventListener("input",e => updateHSLBox(e.target.value,'hue'))
+hslSliderSat.addEventListener("input",e => updateHSLBox(e.target.value,'sat'))
+hslSliderLight.addEventListener("input",e => updateHSLBox(e.target.value,'light'))
+
+hslTextHue.addEventListener("input",e => updateHSLBox(e.target.value,'hue'))
+hslTextSat.addEventListener("input",e => updateHSLBox(e.target.value,'sat'))
+hslTextLight.addEventListener("input",e => updateHSLBox(e.target.value,'light'))
 
 const testing = 
 [

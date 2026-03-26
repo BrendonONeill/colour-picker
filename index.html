@@ -19,7 +19,7 @@
         <main>
             <div class="hover-colour colour-display-none">
             </div>
-            <grid class="grid">
+            <div class="grid">
                 <section class="grid-main-canvas--slider">
                 <div class="canvas-container">
                     <canvas id="hueCanvas" width="720" height="500"></canvas>
@@ -325,13 +325,43 @@
 
                 </section>
                 
-                
+                <section class="colour-range-container">
+                    <div class="colour-hue-header">
+                        <p>Colour Hue </p>
+                    </div>
+                    <div class="colour-hue-container">
+                        <div id="hue-box" class="colour-hue-box">
+                        </div>
+                        <div class="colour-hue-hsl">
+                        <p>HSL</p>
+                        <button class="button-reset text-button-hsl">
+                        <p id="hue-box-text" class="colour-paste-rgba colour-paste">hsl(358, 100%, 100%)</p>
+                        <img src="copy.svg" height="20" width="20" alt="">
+                        </button>
+                        </div>
+                        <form class="hsl-form">
+                            <label for="hue-hsl">
+                                <p>Hue</p>
+                                <span class="hsl-flex"><input type="range" value="0" min="0" max="360" class="lightness-range hsl-range" name="hue-hsl" id="hue-hsl-range"><input type="number" class="hsl-range-text" value="0" min="0" max="360" name="" id="hue-hsl-text"></span>
+                            </label>
+                            <label for="sat-hsl">
+                                <p>Sat</p>
+                                <span class="hsl-flex"><input type="range" value="50" min="0" max="100" class="lightness-range hsl-range" name="sat-hsl" id="sat-hsl-range"><input type="number" class="hsl-range-text" value="50" min="0" max="100" name="" id="sat-hsl-text"></span>
+                            </label>
+                            <label for="light-hsl">
+                                <p>Light</p>
+                                <span class="hsl-flex"><input type="range" value="50" min="0" max="100" class="lightness-range hsl-range" name="light-hsl" id="light-hsl-range"><input type="number" class="hsl-range-text" value="50" min="0" max="100" name="" id="light-hsl-text"></span>
+                            </label>
+                        </form>
+                    </div>
+                </section>
                 <div class="palettes-header">
                     <p>My recommended palettes</p>
                 </div>
                 <div class="palettes-container">
                 </div>
-            </grid>
+                
+            </div>
         </main>
         <footer>
             
