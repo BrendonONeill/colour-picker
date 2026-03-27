@@ -74,6 +74,7 @@ const hslSliderLight = document.getElementById("light-hsl-range");
 const hslTextHue = document.getElementById("hue-hsl-text");
 const hslTextSat = document.getElementById("sat-hsl-text");
 const hslTextLight = document.getElementById("light-hsl-text");
+const textButtonHSL= document.querySelector(".text-button-hsl");
 
 
 let pendingUpdate = false
@@ -994,6 +995,20 @@ hslSliderLight.addEventListener("input",e => updateHSLBox(e.target.value,'light'
 hslTextHue.addEventListener("input",e => updateHSLBox(e.target.value,'hue'))
 hslTextSat.addEventListener("input",e => updateHSLBox(e.target.value,'sat'))
 hslTextLight.addEventListener("input",e => updateHSLBox(e.target.value,'light'))
+
+hslBox.addEventListener("click",(e) => {
+    handleColourClicked(e.target.style.backgroundColor)
+    updateInputColour(selectedColours[selectedColours.activeSelection].hex)
+})
+
+textButtonHSL.addEventListener("click", () => {
+        let a = textButtonHSL.querySelector("p").textContent;
+        tabCopy.classList.remove("colour-display-none")
+        navigator.clipboard.writeText(a)
+        setTimeout(() => {
+            tabCopy.classList.add("colour-display-none")
+        },3000)
+    })
 
 const testing = 
 [
