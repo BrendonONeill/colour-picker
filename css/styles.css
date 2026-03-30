@@ -1084,15 +1084,26 @@ canvas
     grid-template-columns: repeat(32, 25px);
 }
 
+.colour-hue-header
+{
+    grid-column: 8/13;
+}
+
+.colour-hue-container
+{
+    grid-column: 8/23;
+}
+
+
 .palettes-section
 {
     padding: 1rem;
-    width: 80%;
+    width: 55%;
     margin: auto;
 }
 .palettes-container
 {
-    width: 70%;
+    width: 100%;
     align-self: center;
     justify-content: center;
 }
@@ -1344,6 +1355,17 @@ canvas
     grid-template-columns: repeat(16, 25px);
 }
 
+.colour-hue-header
+{
+    grid-column: 1/10;
+}
+
+.colour-hue-container
+{
+    grid-column: 1/16;
+}
+
+
 .palettes-section
 {
     width: 54%;
@@ -1399,10 +1421,23 @@ canvas
     
 .grid
 {
-    padding: 2rem 0;
+    padding: 2rem 0.2rem;
     width: 100%;
-    grid-template-rows: repeat(184, 25px);
+    grid-template-rows: repeat(161, 25px);
     grid-template-columns: repeat(15, 25px);
     border-radius: 5px;
+}
+
+.palettes-container
+{
+    width: 100%;
+    padding: 0.2rem;
+
+}
+
+.palettes-section
+{
+    padding: 0;
+    width: 100%;
 }
 }
