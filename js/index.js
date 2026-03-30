@@ -1047,7 +1047,6 @@ function generatePalette(mainContainer, arr)
         colourDiv.style.background =`#${arr[i]}`;
         colourDiv.addEventListener("click", (e) => 
             {
-                debugger
                 handleColourClicked(e.target.style.backgroundColor)
                 updateInputColour(selectedColours[selectedColours.activeSelection].hex)
             })
