@@ -886,6 +886,12 @@ canvas
     grid-template-columns: repeat(60, 25px);
 }
 
+.palettes-section
+{
+    width: 80%;
+    margin: auto;
+}
+
 }
 
 /* Tablet Screens */ 
