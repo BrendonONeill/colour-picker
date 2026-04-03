@@ -194,13 +194,13 @@ canvas.addEventListener("mousemove", (e) => {
     const sat = Math.round((100 - (y / canvasHeight) * 100));
     const color = `hsl(${hue}, ${sat}%, ${light}%)`;
     hoverColour.style.backgroundColor = color
-    hoverColour.style.transform = `translate(${((e.clientX + window.scrollX) + 5)}px, ${((e.clientY + window.scrollY) - 110)}px)`;
+    hoverColour.style.transform = `translate(${((e.clientX + window.scrollX) + 15)}px, ${((e.clientY + window.scrollY) - 125)}px)`;
 
     if (!pendingUpdate) {
     pendingUpdate = true;
     requestAnimationFrame(() => {
         hoverColour.style.backgroundColor = color
-        hoverColour.style.transform = `translate(${((e.clientX + window.scrollX) + 5)}px, ${((e.clientY + window.scrollY) - 110)}px)`;
+        hoverColour.style.transform = `translate(${((e.clientX + window.scrollX) - 15)}px, ${((e.clientY + window.scrollY) - 125)}px)`;
         pendingUpdate = false;
     });
   }
@@ -250,6 +250,7 @@ slider.addEventListener("input",(e) => {
     clearCanvas()
     sliderText.textContent = e.target.value;
     light = e.target.value
+    tooLight()
     if(!pendingUpdate) {
         pendingUpdate = true;
         requestAnimationFrame(() => {
@@ -258,6 +259,20 @@ slider.addEventListener("input",(e) => {
         })
     }
 })
+
+function tooLight()
+{
+    if(light >= 70)
+    {
+        canvas.classList.add("canvas-too-bright");
+        hoverColour.classList.add("casvas-too-bright-hover-colour");
+    }
+    else if(light < 70)
+    {
+        canvas.classList.remove("canvas-too-bright");
+        hoverColour.classList.remove("casvas-too-bright-hover-colour");
+    }
+}
 
 
 function updateColourArray(colour)
