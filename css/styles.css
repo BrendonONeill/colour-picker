@@ -22,7 +22,6 @@
 body
 {
      font-family: "Roboto", sans-serif;
-
 }
 
 nav,footer
@@ -137,8 +136,13 @@ main
 
 canvas
 {
-    cursor: crosshair;
+    cursor: url("/crosshair.svg") 30 30, crosshair;
     border: 3px solid var(--main-border-colour);
+}
+
+.canvas-too-bright
+{
+    cursor: url("/dark-crosshair.svg") 30 30, crosshair;
 }
 
 .grid-main-colour-selection
@@ -477,6 +481,11 @@ canvas
     border: 2px solid white;
     position: absolute;
     pointer-events: none;
+}
+
+.casvas-too-bright-hover-colour
+{
+   border: 2px solid black;
 }
 
 .colour-display-none
@@ -867,6 +876,9 @@ canvas
     padding: 1rem;
     font-weight: bold;
 }
+
+
+
 
 .colour-pal
 {
