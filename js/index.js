@@ -77,6 +77,11 @@ const hslTextLight = document.getElementById("light-hsl-text");
 const textButtonHSL= document.querySelector(".text-button-hsl");
 
 
+const gradListContainer = document.querySelector(".grad-colour-style-list-container");
+let gradAddToList = document.querySelector(".add-grad-colour-style");
+let gradRemoveDiv = document.querySelectorAll(".grad-colour-type-remove")
+
+
 let pendingUpdate = false
 
 
@@ -1024,6 +1029,80 @@ textButtonHSL.addEventListener("click", () => {
             tabCopy.classList.add("colour-display-none")
         },3000)
     })
+
+function handleRemoveFromGradList(e)
+{
+    let divCount = gradListContainer.querySelectorAll(".grad-colour-style-container").length;
+    console.log(divCount, "test")
+    if(divCount == 4)
+    {
+        e.target.parentElement.remove()
+        let button = document.createElement("button");
+        button.classList.add("button-reset","add-grad-colour-style");
+        button.innerHTML = `<img src="plus.svg" width="26px" height="26px" alt="">`
+        button.addEventListener("click", (e) => {
+        e.preventDefault();
+        addToGradList()
+        })
+        gradAddToList = button;
+        gradListContainer.append(button);
+    }
+    else if(divCount < 4)
+    {
+        e.target.parentElement.remove()
+    }
+    else
+    {
+        return;
+    }
+    
+}
+
+function addToGradList()
+{
+    const count = gradListContainer.children.length;
+    console.log(count);
+    let div = document.createElement("div");
+    div.classList.add("grad-colour-style-container")
+    div.innerHTML = `
+                    <div class="grad-colour-type-display"></div>
+                    <input type="text" name="grad-colour-type" class="grad-colour-type" value="#672277">
+                    <input type="number" name="grad-colour-type-stop" value="100" min="0" max="100" class="grad-colour-type-stop">
+                    <button class="button-reset grad-colour-type-remove"> <img src="close.svg" width="26px" height="26px" alt=""></button>
+                    `
+    let button = div.querySelector(".grad-colour-type-remove");
+    button.addEventListener("click", (e) => {
+        e.preventDefault()
+        handleRemoveFromGradList(e)
+    })
+    if(count < 4)
+    {
+        gradListContainer.insertBefore(div,gradAddToList);
+    }
+    else if(count == 4)
+    {
+        gradListContainer.replaceChild(div,gradAddToList);
+    }
+    else
+    {
+        return
+    }
+    
+}
+
+gradAddToList.addEventListener("click", (e) => {
+    e.preventDefault();
+    addToGradList()
+})
+
+gradRemoveDiv.forEach((button) => {
+    button.addEventListener("click", (e) => {
+        e.preventDefault()
+        handleRemoveFromGradList(e)
+    })
+})
+
+
 
 const testing = 
 [
