@@ -78,8 +78,13 @@ const textButtonHSL= document.querySelector(".text-button-hsl");
 
 
 const gradListContainer = document.querySelector(".grad-colour-style-list-container");
+const gradFormMain = document.querySelector(".grad-form-main");
 let gradAddToList = document.querySelector(".add-grad-colour-style");
-let gradRemoveDiv = document.querySelectorAll(".grad-colour-type-remove")
+let gradRemoveDiv = document.querySelectorAll(".grad-colour-type-remove");
+let gradDeg = document.querySelector(".grad-deg");
+let gradColourTypes = document.querySelectorAll(".grad-colour-type");
+let gradColourTypesStop = document.querySelectorAll(".grad-colour-type-stop");
+let gradDisplay = document.querySelector(".colour-grad-display");
 
 
 let pendingUpdate = false
@@ -1033,7 +1038,6 @@ textButtonHSL.addEventListener("click", () => {
 function handleRemoveFromGradList(e)
 {
     let divCount = gradListContainer.querySelectorAll(".grad-colour-style-container").length;
-    console.log(divCount, "test")
     if(divCount == 4)
     {
         e.target.parentElement.remove()
@@ -1066,14 +1070,22 @@ function addToGradList()
     div.classList.add("grad-colour-style-container")
     div.innerHTML = `
                     <div class="grad-colour-type-display"></div>
-                    <input type="text" name="grad-colour-type" class="grad-colour-type" value="#672277">
-                    <input type="number" name="grad-colour-type-stop" value="100" min="0" max="100" class="grad-colour-type-stop">
-                    <button class="button-reset grad-colour-type-remove"> <img src="close.svg" width="26px" height="26px" alt=""></button>
+                    <input type="text" name="grad-colour-type" aria-label="Gradient colour selection" class="grad-colour-type" value="#672277">
+                    <input type="number" name="grad-colour-type-stop" aria-label="Gradient colour selection stoppage point" value="100" min="0" max="100" class="grad-colour-type-stop">
+                    <button class="button-reset grad-colour-type-remove" aria-label="remove colour from gradient"> <img src="close.svg" width="26px" height="26px" alt=""></button>
                     `
     let button = div.querySelector(".grad-colour-type-remove");
+    let gradTypeInput = div.querySelector(".grad-colour-type");
+    let gradTypeStop = div.querySelector(".grad-colour-type-stop");
     button.addEventListener("click", (e) => {
         e.preventDefault()
         handleRemoveFromGradList(e)
+    })
+    gradTypeInput.addEventListener("blur", () => {
+        updatingColourGradientDisplay()
+    })
+    gradTypeStop.addEventListener("blur", () => {
+        updatingColourGradientDisplay()
     })
     if(count < 4)
     {
@@ -1103,8 +1115,57 @@ gradRemoveDiv.forEach((button) => {
 })
 
 
+function updatingColourGradientDisplay()
+{
+    let gradArr = [];
+    let degree = gradDeg.value;
+    let gradType = document.querySelector('.grad-type:checked')?.value;
+    let gradientString = gradType == 'linear' ? `${gradType}-gradient(${degree}deg,` : `${gradType}-gradient(circle,`;
+    let gradColourTypesContainer = gradListContainer.querySelectorAll(".grad-colour-style-container");
+    gradColourTypesContainer.forEach((container) => {
+        let value = container.querySelector(".grad-colour-type").value;
+        let stop = container.querySelector(".grad-colour-type-stop").value;
+        let display = container.querySelector(".grad-colour-type-display");
+        display.style.background = value;
+        console.log(value, stop);
+        let obj = {value:value, stop:stop}
+        gradArr.push(obj)
+    })
+    
+    for (let i = 0; i < gradArr.length; i++) {
+        if(i == 0)
+        {
+            gradientString += `${gradArr[i].value} ${gradArr[i].stop}%`
+        }
+        else
+        {
+            gradientString += `, ${gradArr[i].value} ${gradArr[i].stop}%`
+        }
+    }
+    gradDisplay.style.background = gradientString
+}
 
-const testing = 
+gradColourTypes.forEach((colourTypesInput) => {
+    colourTypesInput.addEventListener("blur", () => {
+        updatingColourGradientDisplay()
+    })
+})
+
+gradColourTypesStop.forEach((colourTypesStops) => {
+    colourTypesStops.addEventListener("blur", () => {
+        updatingColourGradientDisplay()
+    })
+})
+
+gradFormMain.addEventListener("change", () => {
+    updatingColourGradientDisplay()
+})
+
+
+
+
+
+const collectionPalettes = 
 [
     ["b9b5ff","c4baff","cebeff","d8c2ff","e2c6ff"],
     ["d1faff","9bd1e5","6a8eae","57a773","157145"],
@@ -1153,7 +1214,7 @@ function generatePalette(mainContainer, arr)
     return mainContainer;
 }
 
-generatePalettes(testing)
+generatePalettes(collectionPalettes)
 
 
 function openDB() {
