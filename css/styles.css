@@ -809,7 +809,7 @@ canvas
 .colour-grad-display-container
 {
     background-color: var(--main-ui-colour);
-    padding: 1rem;
+    padding: 2.2rem 1rem 1.5rem 1rem;
     color: white;
     grid-row: 4/21;
     grid-column: 18/33;
@@ -818,17 +818,37 @@ canvas
     border-radius: 5px 0 0 5px;
     box-shadow: rgba(26, 29, 32, 0.78).95px 1.95px 2.6px;
     display: flex;
+    flex-flow: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    row-gap: 0.5rem;
 }
 
 .colour-grad-display
 {
     width: 95%;
-    height: 95%;
-    background: linear-gradient(90deg,rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
+    height: 78%;
+    background: linear-gradient(0deg,#E5AF9B 10%, #9BD1E5 100%);
     border: 2px solid white;
     border-radius: 5px;
+}
+
+.copy-grad
+{
+    width: 95%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 67px;
+    border: 2px solid white;
+    border-radius: 5px;
+    gap: 1rem;
+    background-color: var(--main-bg);
+}
+
+.copy-grad:hover
+{
+    background-color: var(--main-ui-colour);
 }
 
 .colour-grad-form-container
@@ -847,9 +867,9 @@ canvas
 .grad-form-main
 {
     display: flex;
-    padding: 1rem;
-    padding-bottom: 1.5rem;
-    justify-content: center;
+    padding: 1rem 1rem 1.5rem 0;
+    justify-content: flex-start;
+    align-items: center;
     gap: 1rem;
 }
 
@@ -946,6 +966,16 @@ canvas
     background-color: #672277;
     border: 2px solid white;
     border-radius: 5px;
+}
+
+.display-1
+{
+   background-color: #E5AF9B;
+}
+
+.display-2
+{
+    background-color: #9BD1E5;
 }
 
 .grad-colour-type-stop

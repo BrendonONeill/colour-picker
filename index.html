@@ -363,6 +363,7 @@
                         <div class="colour-grad-display">
 
                         </div>
+                        <button class="button-reset copy-grad" aria-label="copy gradient" >Copy Gradient <img src="copy.svg" height="20" width="20" alt=""></button>
                     </div>
 
                     <div class="colour-grad-form-container">
@@ -371,28 +372,36 @@
                                 <div class="grad-form-radio">
                                     <span class="grad-type-radio">
                                         <label for="grad-type">Linear</label>
-                                        <input type="radio" class="grad-type" name="grad-type" value="test" checked />
+                                        <input type="radio" class="grad-type" name="grad-type" aria-label="Gradient type linear" value="linear" checked />
                                     </span>
                                     <span class="grad-type-radio">
                                         <label for="grad-type">Radial</label>
-                                        <input type="radio" class="grad-type" name="grad-type" value="test" />
+                                        <input type="radio" class="grad-type" name="grad-type" aria-label="Gradient type radial" value="radial" />
                                     </span>
                                 </div>
                                     <div class="grad-deg-container">
                                     <label for="grad-deg">Degree</label>
-                                    <input type="number" class="grad-deg" max="360" min="0" name="grad-deg" value="0" />
+                                    <input type="number" class="grad-deg" aria-label="Gradient degrees" max="360" min="0" name="grad-deg" value="0" />
                                     </div>
                             </div>
                             <div class="grad-colour-style-list-container">
                                 <div class="grad-colour-style-container">
-                                    <div class="grad-colour-type-display">
+                                    <div class="grad-colour-type-display display-1">
 
                                     </div>
-                                    <input type="text" name="grad-colour-type" class="grad-colour-type" value="#672277">
-                                    <input type="number" name="grad-colour-type-stop" value="10" min="0" max="100" class="grad-colour-type-stop">
-                                    <button class="button-reset grad-colour-type-remove"> <img src="close.svg" width="26px" height="26px" alt=""></button>
+                                    <input type="text" name="grad-colour-type" aria-label="Gradient colour selection" class="grad-colour-type" value="#E5AF9B">
+                                    <input type="number" name="grad-colour-type-stop" aria-label="Gradient colour selection stoppage point" value="10" min="0" max="100" class="grad-colour-type-stop">
+                                    <button class="button-reset grad-colour-type-remove" aria-label="remove colour from gradient"> <img src="close.svg" width="26px" height="26px" alt=""></button>
                                 </div>
-                                <button class="button-reset add-grad-colour-style">
+                                <div class="grad-colour-style-container">
+                                    <div class="grad-colour-type-display display-2">
+
+                                    </div>
+                                    <input type="text" name="grad-colour-type" aria-label="Gradient colour selection" class="grad-colour-type" value="#9BD1E5">
+                                    <input type="number" name="grad-colour-type-stop" aria-label="Gradient colour selection stoppage point" value="100" min="0" max="100" class="grad-colour-type-stop">
+                                    <button class="button-reset grad-colour-type-remove" aria-label="remove colour from gradient"> <img src="close.svg" width="26px" height="26px" alt=""></button>
+                                </div>
+                                <button class="button-reset add-grad-colour-style" aria-label="Add colour to gradient">
                                     <img src="plus.svg" width="26px" height="26px" alt="">
                                 </button>
                             </div>
