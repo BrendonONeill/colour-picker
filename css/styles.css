@@ -799,7 +799,7 @@ canvas
     padding: 1rem;
     color: white;
     grid-row: 1/3;
-    grid-column: 18/27;
+    grid-column: 20/29;
     text-align: center;
     font-weight: bold;
     border-radius: 5px;
@@ -812,7 +812,7 @@ canvas
     padding: 2.2rem 1rem 1.5rem 1rem;
     color: white;
     grid-row: 4/21;
-    grid-column: 18/33;
+    grid-column: 20/35;
     text-align: center;
     font-weight: bold;
     border-radius: 5px 0 0 5px;
@@ -857,7 +857,7 @@ canvas
     padding: 1rem;
     color: white;
     grid-row: 4/21;
-    grid-column: 33/48;
+    grid-column: 35/50;
     text-align: center;
     font-weight: bold;
     border-radius:  0 5px 5px 0;
@@ -1144,7 +1144,7 @@ canvas
     width: 80%;
     margin: auto;
     display: grid;
-    grid-template-rows: repeat(118, 25px);
+    grid-template-rows: repeat(139, 25px);
     grid-template-columns: repeat(60, 25px);
 }
 
@@ -1326,20 +1326,38 @@ canvas
 
 .colour-range-container
 {
-    grid-row: 98/118;
+    grid-row: 98/139;
     grid-column: 1/32;
-    grid-template-rows: repeat(20, 25px);
+    grid-template-rows: repeat(41, 25px);
     grid-template-columns: repeat(32, 25px);
+}
+
+.colour-grad-header
+{
+    grid-row: 22/24;
+    grid-column: 1/9;
+}
+
+.colour-grad-display-container
+{
+    grid-row: 25/42;
+    grid-column: 1/15;
+}
+
+.colour-grad-form-container
+{
+    grid-row: 25/42;
+    grid-column: 15/30;
 }
 
 .colour-hue-header
 {
-    grid-column: 8/13;
+    grid-column: 1/6;
 }
 
 .colour-hue-container
 {
-    grid-column: 8/23;
+    grid-column: 1/16;
 }
 
 
@@ -1378,7 +1396,7 @@ canvas
     padding: 1.2rem;
     width: 54%;
     margin: auto;
-    grid-template-rows: repeat(161, 25px);
+    grid-template-rows: repeat(200, 25px);
     grid-template-columns: repeat(16, 25px);
     border-radius: 5px;
 }
@@ -1597,10 +1615,28 @@ canvas
 .colour-range-container
 {
     padding: 0;
-    grid-row: 141/161;
+    grid-row: 141/200;
     grid-column: 1/16;
-    grid-template-rows: repeat(20, 25px);
+    grid-template-rows: repeat(59, 25px);
     grid-template-columns: repeat(16, 25px);
+}
+
+.colour-grad-display-container
+{
+   border-radius: 5px 5px 0 0;
+   grid-column: 1/16;
+}
+
+.colour-grad-form-container
+{
+    grid-row: 42/59;
+    grid-column: 1/16;
+    border-radius: 0 0 5px 5px;
+}
+
+.grad-colour-type-remove
+{
+    margin-left: 0;
 }
 
 .colour-hue-header

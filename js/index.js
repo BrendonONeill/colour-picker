@@ -85,6 +85,8 @@ let gradDeg = document.querySelector(".grad-deg");
 let gradColourTypes = document.querySelectorAll(".grad-colour-type");
 let gradColourTypesStop = document.querySelectorAll(".grad-colour-type-stop");
 let gradDisplay = document.querySelector(".colour-grad-display");
+let copyGradButton = document.querySelector(".copy-grad");
+let gradFullString = 'linear-gradient(0deg,#E5AF9B 10%, #9BD1E5 100%';
 
 
 let pendingUpdate = false
@@ -1065,7 +1067,6 @@ function handleRemoveFromGradList(e)
 function addToGradList()
 {
     const count = gradListContainer.children.length;
-    console.log(count);
     let div = document.createElement("div");
     div.classList.add("grad-colour-style-container")
     div.innerHTML = `
@@ -1127,12 +1128,16 @@ function updatingColourGradientDisplay()
         let stop = container.querySelector(".grad-colour-type-stop").value;
         let display = container.querySelector(".grad-colour-type-display");
         display.style.background = value;
-        console.log(value, stop);
         let obj = {value:value, stop:stop}
         gradArr.push(obj)
     })
-    
+    let checkColour = true
     for (let i = 0; i < gradArr.length; i++) {
+        if(!CSS.supports("color", gradArr[i].value))
+        {
+            checkColour = false;
+            break
+        }
         if(i == 0)
         {
             gradientString += `${gradArr[i].value} ${gradArr[i].stop}%`
@@ -1142,7 +1147,12 @@ function updatingColourGradientDisplay()
             gradientString += `, ${gradArr[i].value} ${gradArr[i].stop}%`
         }
     }
-    gradDisplay.style.background = gradientString
+
+    if(checkColour)
+    {
+        gradDisplay.style.background = gradientString;
+        gradFullString = gradientString;
+    }
 }
 
 gradColourTypes.forEach((colourTypesInput) => {
@@ -1162,6 +1172,13 @@ gradFormMain.addEventListener("change", () => {
 })
 
 
+copyGradButton.addEventListener("click", (e) => {
+        tabCopy.classList.remove("colour-display-none")
+        navigator.clipboard.writeText(gradFullString)
+        setTimeout(() => {
+            tabCopy.classList.add("colour-display-none")
+        },3000)
+})
 
 
 
