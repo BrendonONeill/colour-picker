@@ -66,6 +66,29 @@ const otherAAALarge = document.getElementById('o-aaal');
 const textButtons = document.querySelectorAll(".text-button");
 const tabCopy = document.querySelector(".tab");
 
+const hslBox = document.getElementById("hue-box");
+const hslBoxText = document.getElementById("hue-box-text");
+const hslSliderHue = document.getElementById("hue-hsl-range");
+const hslSliderSat = document.getElementById("sat-hsl-range");
+const hslSliderLight = document.getElementById("light-hsl-range");
+const hslTextHue = document.getElementById("hue-hsl-text");
+const hslTextSat = document.getElementById("sat-hsl-text");
+const hslTextLight = document.getElementById("light-hsl-text");
+const textButtonHSL= document.querySelector(".text-button-hsl");
+
+
+const gradListContainer = document.querySelector(".grad-colour-style-list-container");
+const gradFormMain = document.querySelector(".grad-form-main");
+let gradAddToList = document.querySelector(".add-grad-colour-style");
+let gradRemoveDiv = document.querySelectorAll(".grad-colour-type-remove");
+let gradDeg = document.querySelector(".grad-deg");
+let gradColourTypes = document.querySelectorAll(".grad-colour-type");
+let gradColourTypesStop = document.querySelectorAll(".grad-colour-type-stop");
+let gradDisplay = document.querySelector(".colour-grad-display");
+let copyGradButton = document.querySelector(".copy-grad");
+let gradFullString = 'linear-gradient(0deg,#E5AF9B 10%, #9BD1E5 100%';
+
+
 let pendingUpdate = false
 
 
@@ -183,13 +206,13 @@ canvas.addEventListener("mousemove", (e) => {
     const sat = Math.round((100 - (y / canvasHeight) * 100));
     const color = `hsl(${hue}, ${sat}%, ${light}%)`;
     hoverColour.style.backgroundColor = color
-    hoverColour.style.transform = `translate(${((e.clientX + window.scrollX) + 5)}px, ${((e.clientY + window.scrollY) - 110)}px)`;
+    hoverColour.style.transform = `translate(${((e.clientX + window.scrollX) + 15)}px, ${((e.clientY + window.scrollY) - 125)}px)`;
 
     if (!pendingUpdate) {
     pendingUpdate = true;
     requestAnimationFrame(() => {
         hoverColour.style.backgroundColor = color
-        hoverColour.style.transform = `translate(${((e.clientX + window.scrollX) + 5)}px, ${((e.clientY + window.scrollY) - 110)}px)`;
+        hoverColour.style.transform = `translate(${((e.clientX + window.scrollX) - 15)}px, ${((e.clientY + window.scrollY) - 125)}px)`;
         pendingUpdate = false;
     });
   }
@@ -239,6 +262,7 @@ slider.addEventListener("input",(e) => {
     clearCanvas()
     sliderText.textContent = e.target.value;
     light = e.target.value
+    tooLight()
     if(!pendingUpdate) {
         pendingUpdate = true;
         requestAnimationFrame(() => {
@@ -247,6 +271,20 @@ slider.addEventListener("input",(e) => {
         })
     }
 })
+
+function tooLight()
+{
+    if(light >= 70)
+    {
+        canvas.classList.add("canvas-too-bright");
+        hoverColour.classList.add("casvas-too-bright-hover-colour");
+    }
+    else if(light < 70)
+    {
+        canvas.classList.remove("canvas-too-bright");
+        hoverColour.classList.remove("casvas-too-bright-hover-colour");
+    }
+}
 
 
 function updateColourArray(colour)
@@ -951,8 +989,200 @@ function updateInputColour(value)
         selectedColour2Text.value = value.toUpperCase()
     }
 }
+const hslBoxValues = {h:0,s:50,l:50}
+function updateHSLBox(value,type)
+{
+    if(type == 'hue')
+    {
+        hslBoxValues.h = value;
+        hslTextHue.value = value;
+        hslSliderHue.value = value;
+    }
+    if(type == 'sat')
+    {
+        hslBoxValues.s = value;
+        hslTextSat.value = value;
+        hslSliderSat.value = value;
+    }
+    if(type == 'light')
+    {
+        hslBoxValues.l = value;
+        hslTextLight.value = value;
+        hslSliderLight.value = value;
+    }
 
-const testing = 
+    hslBox.style.backgroundColor = `hsl(${hslBoxValues.h},${hslBoxValues.s}%,${hslBoxValues.l}%)`
+    hslBoxText.textContent = `hsl(${hslBoxValues.h},${hslBoxValues.s}%,${hslBoxValues.l}%)`
+}
+
+hslSliderHue.addEventListener("input",e => updateHSLBox(e.target.value,'hue'))
+hslSliderSat.addEventListener("input",e => updateHSLBox(e.target.value,'sat'))
+hslSliderLight.addEventListener("input",e => updateHSLBox(e.target.value,'light'))
+
+hslTextHue.addEventListener("input",e => updateHSLBox(e.target.value,'hue'))
+hslTextSat.addEventListener("input",e => updateHSLBox(e.target.value,'sat'))
+hslTextLight.addEventListener("input",e => updateHSLBox(e.target.value,'light'))
+
+hslBox.addEventListener("click",(e) => {
+    handleColourClicked(e.target.style.backgroundColor)
+    updateInputColour(selectedColours[selectedColours.activeSelection].hex)
+})
+
+textButtonHSL.addEventListener("click", () => {
+        let a = textButtonHSL.querySelector("p").textContent;
+        tabCopy.classList.remove("colour-display-none")
+        navigator.clipboard.writeText(a)
+        setTimeout(() => {
+            tabCopy.classList.add("colour-display-none")
+        },3000)
+    })
+
+function handleRemoveFromGradList(e)
+{
+    let divCount = gradListContainer.querySelectorAll(".grad-colour-style-container").length;
+    if(divCount == 4)
+    {
+        e.target.parentElement.remove()
+        let button = document.createElement("button");
+        button.classList.add("button-reset","add-grad-colour-style");
+        button.innerHTML = `<img src="plus.svg" width="26px" height="26px" alt="">`
+        button.addEventListener("click", (e) => {
+        e.preventDefault();
+        addToGradList()
+        })
+        gradAddToList = button;
+        gradListContainer.append(button);
+    }
+    else if(divCount < 4)
+    {
+        e.target.parentElement.remove()
+    }
+    else
+    {
+        return;
+    }
+    
+}
+
+function addToGradList()
+{
+    const count = gradListContainer.children.length;
+    let div = document.createElement("div");
+    div.classList.add("grad-colour-style-container")
+    div.innerHTML = `
+                    <div class="grad-colour-type-display"></div>
+                    <input type="text" name="grad-colour-type" aria-label="Gradient colour selection" class="grad-colour-type" value="#672277">
+                    <input type="number" name="grad-colour-type-stop" aria-label="Gradient colour selection stoppage point" value="100" min="0" max="100" class="grad-colour-type-stop">
+                    <button class="button-reset grad-colour-type-remove" aria-label="remove colour from gradient"> <img src="close.svg" width="26px" height="26px" alt=""></button>
+                    `
+    let button = div.querySelector(".grad-colour-type-remove");
+    let gradTypeInput = div.querySelector(".grad-colour-type");
+    let gradTypeStop = div.querySelector(".grad-colour-type-stop");
+    button.addEventListener("click", (e) => {
+        e.preventDefault()
+        handleRemoveFromGradList(e)
+    })
+    gradTypeInput.addEventListener("blur", () => {
+        updatingColourGradientDisplay()
+    })
+    gradTypeStop.addEventListener("blur", () => {
+        updatingColourGradientDisplay()
+    })
+    if(count < 4)
+    {
+        gradListContainer.insertBefore(div,gradAddToList);
+    }
+    else if(count == 4)
+    {
+        gradListContainer.replaceChild(div,gradAddToList);
+    }
+    else
+    {
+        return
+    }
+    
+}
+
+gradAddToList.addEventListener("click", (e) => {
+    e.preventDefault();
+    addToGradList()
+})
+
+gradRemoveDiv.forEach((button) => {
+    button.addEventListener("click", (e) => {
+        e.preventDefault()
+        handleRemoveFromGradList(e)
+    })
+})
+
+
+function updatingColourGradientDisplay()
+{
+    let gradArr = [];
+    let degree = gradDeg.value;
+    let gradType = document.querySelector('.grad-type:checked')?.value;
+    let gradientString = gradType == 'linear' ? `${gradType}-gradient(${degree}deg,` : `${gradType}-gradient(circle,`;
+    let gradColourTypesContainer = gradListContainer.querySelectorAll(".grad-colour-style-container");
+    gradColourTypesContainer.forEach((container) => {
+        let value = container.querySelector(".grad-colour-type").value;
+        let stop = container.querySelector(".grad-colour-type-stop").value;
+        let display = container.querySelector(".grad-colour-type-display");
+        display.style.background = value;
+        let obj = {value:value, stop:stop}
+        gradArr.push(obj)
+    })
+    let checkColour = true
+    for (let i = 0; i < gradArr.length; i++) {
+        if(!CSS.supports("color", gradArr[i].value))
+        {
+            checkColour = false;
+            break
+        }
+        if(i == 0)
+        {
+            gradientString += `${gradArr[i].value} ${gradArr[i].stop}%`
+        }
+        else
+        {
+            gradientString += `, ${gradArr[i].value} ${gradArr[i].stop}%`
+        }
+    }
+
+    if(checkColour)
+    {
+        gradDisplay.style.background = gradientString;
+        gradFullString = gradientString;
+    }
+}
+
+gradColourTypes.forEach((colourTypesInput) => {
+    colourTypesInput.addEventListener("blur", () => {
+        updatingColourGradientDisplay()
+    })
+})
+
+gradColourTypesStop.forEach((colourTypesStops) => {
+    colourTypesStops.addEventListener("blur", () => {
+        updatingColourGradientDisplay()
+    })
+})
+
+gradFormMain.addEventListener("change", () => {
+    updatingColourGradientDisplay()
+})
+
+
+copyGradButton.addEventListener("click", (e) => {
+        tabCopy.classList.remove("colour-display-none")
+        navigator.clipboard.writeText(gradFullString)
+        setTimeout(() => {
+            tabCopy.classList.add("colour-display-none")
+        },3000)
+})
+
+
+
+const collectionPalettes = 
 [
     ["b9b5ff","c4baff","cebeff","d8c2ff","e2c6ff"],
     ["d1faff","9bd1e5","6a8eae","57a773","157145"],
@@ -989,7 +1219,6 @@ function generatePalette(mainContainer, arr)
         colourDiv.style.background =`#${arr[i]}`;
         colourDiv.addEventListener("click", (e) => 
             {
-                debugger
                 handleColourClicked(e.target.style.backgroundColor)
                 updateInputColour(selectedColours[selectedColours.activeSelection].hex)
             })
@@ -1002,7 +1231,7 @@ function generatePalette(mainContainer, arr)
     return mainContainer;
 }
 
-generatePalettes(testing)
+generatePalettes(collectionPalettes)
 
 
 function openDB() {

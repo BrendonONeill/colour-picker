@@ -19,7 +19,7 @@
         <main>
             <div class="hover-colour colour-display-none">
             </div>
-            <grid class="grid">
+            <div class="grid">
                 <section class="grid-main-canvas--slider">
                 <div class="canvas-container">
                     <canvas id="hueCanvas" width="720" height="500"></canvas>
@@ -325,16 +325,101 @@
 
                 </section>
                 
+                <section class="colour-range-container">
+                    <div class="colour-hue-header">
+                        <p>Colour Hue </p>
+                    </div>
+                    <div class="colour-hue-container">
+                        <button id="hue-box" class="colour-hue-box" aria-label="button to select current colour">
+                        </button>
+                        <div class="colour-hue-hsl">
+                        <p>HSL</p>
+                        <button class="button-reset text-button-hsl">
+                        <p id="hue-box-text" class="colour-paste-rgba colour-paste">hsl(358, 100%, 100%)</p>
+                        <img src="copy.svg" height="20" width="20" alt="">
+                        </button>
+                        </div>
+                        <form class="hsl-form">
+                            <label for="hue-hsl">
+                                <p>Hue</p>
+                                <span class="hsl-flex"><input type="range" value="0" min="0" max="360" class="lightness-range hsl-range" name="hue-hsl" id="hue-hsl-range"><input type="number" class="hsl-range-text" value="0" min="0" max="360" name="" id="hue-hsl-text"></span>
+                            </label>
+                            <label for="sat-hsl">
+                                <p>Sat</p>
+                                <span class="hsl-flex"><input type="range" value="50" min="0" max="100" class="lightness-range hsl-range" name="sat-hsl" id="sat-hsl-range"><input type="number" class="hsl-range-text" value="50" min="0" max="100" name="" id="sat-hsl-text"></span>
+                            </label>
+                            <label for="light-hsl">
+                                <p>Light</p>
+                                <span class="hsl-flex"><input type="range" value="50" min="0" max="100" class="lightness-range hsl-range" name="light-hsl" id="light-hsl-range"><input type="number" class="hsl-range-text" value="50" min="0" max="100" name="" id="light-hsl-text"></span>
+                            </label>
+                        </form>
+                    </div>
+
+                    <div class="colour-grad-header">
+                        <p>Colour Gradient </p>
+                    </div>
+
+                    <div class="colour-grad-display-container">
+                        <div class="colour-grad-display">
+
+                        </div>
+                        <button class="button-reset copy-grad" aria-label="copy gradient" >Copy Gradient <img src="copy.svg" height="20" width="20" alt=""></button>
+                    </div>
+
+                    <div class="colour-grad-form-container">
+                        <form>
+                            <div class="grad-form-main">
+                                <div class="grad-form-radio">
+                                    <span class="grad-type-radio">
+                                        <label for="grad-type">Linear</label>
+                                        <input type="radio" class="grad-type" name="grad-type" aria-label="Gradient type linear" value="linear" checked />
+                                    </span>
+                                    <span class="grad-type-radio">
+                                        <label for="grad-type">Radial</label>
+                                        <input type="radio" class="grad-type" name="grad-type" aria-label="Gradient type radial" value="radial" />
+                                    </span>
+                                </div>
+                                    <div class="grad-deg-container">
+                                    <label for="grad-deg">Degree</label>
+                                    <input type="number" class="grad-deg" aria-label="Gradient degrees" max="360" min="0" name="grad-deg" value="0" />
+                                    </div>
+                            </div>
+                            <div class="grad-colour-style-list-container">
+                                <div class="grad-colour-style-container">
+                                    <div class="grad-colour-type-display display-1">
+
+                                    </div>
+                                    <input type="text" name="grad-colour-type" aria-label="Gradient colour selection" class="grad-colour-type" value="#E5AF9B">
+                                    <input type="number" name="grad-colour-type-stop" aria-label="Gradient colour selection stoppage point" value="10" min="0" max="100" class="grad-colour-type-stop">
+                                    <button class="button-reset grad-colour-type-remove" aria-label="remove colour from gradient"> <img src="close.svg" width="26px" height="26px" alt=""></button>
+                                </div>
+                                <div class="grad-colour-style-container">
+                                    <div class="grad-colour-type-display display-2">
+
+                                    </div>
+                                    <input type="text" name="grad-colour-type" aria-label="Gradient colour selection" class="grad-colour-type" value="#9BD1E5">
+                                    <input type="number" name="grad-colour-type-stop" aria-label="Gradient colour selection stoppage point" value="100" min="0" max="100" class="grad-colour-type-stop">
+                                    <button class="button-reset grad-colour-type-remove" aria-label="remove colour from gradient"> <img src="close.svg" width="26px" height="26px" alt=""></button>
+                                </div>
+                                <button class="button-reset add-grad-colour-style" aria-label="Add colour to gradient">
+                                    <img src="plus.svg" width="26px" height="26px" alt="">
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
                 
+                
+            </div>
+            <div class="palettes-section">
                 <div class="palettes-header">
                     <p>My recommended palettes</p>
-                </div>
-                <div class="palettes-container">
-                </div>
-            </grid>
+            </div>
+            <div class="palettes-container">
+            </div>
+            </div>
         </main>
         <footer>
-            
         </footer>
         <script src="js/index.js" type="module" async defer></script>
     </body>
