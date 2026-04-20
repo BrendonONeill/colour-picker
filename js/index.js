@@ -89,6 +89,12 @@ let copyGradButton = document.querySelector(".copy-grad");
 let gradFullString = 'linear-gradient(0deg,#E5AF9B 10%, #9BD1E5 100%';
 
 
+let customPalettesAddButton = document.querySelector(".custom-palettes-add-button");
+let customPalettesContainer = document.getElementById("custom-palettes-container");
+const customColourArr = ["","","","",""];
+
+
+
 let pendingUpdate = false
 
 
@@ -1232,6 +1238,81 @@ function generatePalette(mainContainer, arr)
 }
 
 generatePalettes(collectionPalettes)
+
+
+let formCustomPaletteTemplate = 
+`
+    <form class='custom-form-container'>
+        <select name="amount" id="palette-amount">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+
+        <button class="button-reset custom-form-accept"><img src="true.svg" width="25" height="25" alt=""></button>
+    </form>
+    <div class='custom-palette-bg'>
+
+    </div>
+`
+
+
+
+function handleCustomPalettesAddButton()
+{
+    generateFormCustomPalette()
+}
+
+function generateFormCustomPalette()
+{
+    const mainBuilder = document.createElement("div");
+    mainBuilder.classList.add("custom-palette-form");
+    mainBuilder.innerHTML = formCustomPaletteTemplate;
+    let acceptButton = mainBuilder.querySelector(".custom-form-accept");
+    acceptButton.addEventListener("click", (e) => {
+        e.preventDefault();
+    })
+    let div = mainBuilder.querySelector('.custom-palette-bg');
+    let selectAmount = mainBuilder.querySelector("#palette-amount");
+    selectAmount.addEventListener(("change"), (e) => {
+        div.innerHTML = ''
+        paletteBuilderPalettes(e.target.value,div)
+    })
+    paletteBuilderPalettes(5,div)
+    customPalettesContainer.append(mainBuilder);
+}
+
+
+function paletteBuilderPalettes(num,div)
+{
+    
+    for (let i = 0; i < num; i++) {
+        let block  = document.createElement("div");
+        block.classList.add("custom-palette-colour");
+        block.dataset.paletteId = i;
+        block.innerHTML = `<form><input class="custom-input" data-text-id="${i}" name="colour-value"></form>`;
+        let text = block.querySelector(".custom-input");
+        text.addEventListener('blur',(e) => {
+            paletteTextUpdate(e,text.dataset.textId);
+        })
+        div.append(block);
+    }
+}
+
+function paletteTextUpdate(e,id)
+{
+    const value = e.target.value;
+    const parent = e.target.parentElement.parentElement
+    parent.style.background = value;
+    customColourArr[id] = value;
+}
+
+customPalettesAddButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    handleCustomPalettesAddButton(e);
+})
 
 
 function openDB() {

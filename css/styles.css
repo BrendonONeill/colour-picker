@@ -1117,6 +1117,83 @@ canvas
     border-radius: 5px;
 }
 
+.custom-palettes-add-button
+{
+    height: 120px;
+    background-color: var(--main-bg);
+    border-radius: 5px;
+    width: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-palette-form
+{
+    width: 400px;
+    height: 120px;
+    background-color: var(--main-ui-colour-darker);
+    border-radius: 5px;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 3fr;
+    padding: 0.4rem;
+}
+
+.custom-palette-bg
+{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 0.4rem;
+}
+
+.custom-palette-colour
+{
+    width: 70px;
+    height: 70px;
+    background-color: #343A40;
+    border-radius: 5px;
+    display: flex;
+    align-items: end;
+    justify-content: center;
+}
+
+.custom-palette-colour form
+{
+    display: flex;
+    flex-flow: column;
+    width: 100%;
+}
+
+.custom-palette-colour form input
+{
+    border: 2px solid white;
+    border-radius: 2px;
+    background-color: #212529;
+    color: white;
+    padding-inline: 0.5rem;
+}
+
+.custom-form-container
+{
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    
+}
+
+.custom-form-accept
+{
+    background-color: var(--main-bg);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
 @media (min-width: 1800px) {
 .grid
 {
