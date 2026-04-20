@@ -11,6 +11,7 @@ This is a colour picker application is a mix of picked features I used in differ
 
 
 ## Working on
+- Custom Palettes
 - Improving the performance of the application
 
 ## Known Errors
