@@ -1,5 +1,4 @@
 "use strict"
-
 const canvas = document.getElementById('hueCanvas');
 const ctx = canvas.getContext('2d');
 
@@ -91,12 +90,12 @@ let gradFullString = 'linear-gradient(0deg,#E5AF9B 10%, #9BD1E5 100%';
 
 let customPalettesAddButton = document.querySelector(".custom-palettes-add-button");
 let customPalettesContainer = document.getElementById("custom-palettes-container");
-const customColourArr = ["","","","",""];
-
+let ActiveForm;
+let customColourArr = ["","","","",""];
+let customPaletteNumber = 5
 
 
 let pendingUpdate = false
-
 
 let light = 50;
 const colourArray = colourArrayLoad()
@@ -1173,7 +1172,8 @@ gradColourTypesStop.forEach((colourTypesStops) => {
     })
 })
 
-gradFormMain.addEventListener("change", () => {
+gradFormMain.addEventListener("change", (e) => {
+    e.preventDefault()
     updatingColourGradientDisplay()
 })
 
@@ -1248,7 +1248,7 @@ let formCustomPaletteTemplate =
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
-            <option value="5">5</option>
+            <option selected="selected" value="5">5</option>
         </select>
 
         <button class="button-reset custom-form-accept"><img src="true.svg" width="25" height="25" alt=""></button>
@@ -1259,10 +1259,47 @@ let formCustomPaletteTemplate =
 `
 
 
+function generateCustomPalette(num)
+{
+    let div = document.createElement('div');
+    div.classList.add("palette",customPaletteSize(num));
+    for (let i = 0; i < num; i++) {
+        let colourPalette = document.createElement('div');
+        colourPalette.classList.add("palette-colour-container");
+        colourPalette.innerHTML = `<button class="button-reset colour-pal" aria-label="Palette colour ${customColourArr[i] !== '' ? customColourArr[i].colour : '#ffffff'}" style="background: ${customColourArr[i] !== '' ? customColourArr[i].colour : '#ffffff'};"></button><p>${customColourArr[i] !== '' ? customColourArr[i].colourText.toUpperCase() : 'ffffff'.toUpperCase()}</p>`
+        div.append(colourPalette);
+    }
+    customColourArr = ["","","","",""];
+    return div;
+}
+
+function customPaletteSize(num)
+{
+    let classValue = ''
+    switch(num){
+        case 1:
+           classValue = "pal-xs"
+            break
+        case 2:
+           classValue = "pal-s"
+            break
+        case 3:
+            classValue = "pal-m"
+            break
+        case 4:
+            classValue = "pal-l"
+            break
+        default:
+            classValue = "pal-xl"
+    }
+    return classValue
+}
+
 
 function handleCustomPalettesAddButton()
 {
-    generateFormCustomPalette()
+    let form = generateFormCustomPalette()
+    customPalettesContainer.replaceChild(form,customPalettesAddButton)
 }
 
 function generateFormCustomPalette()
@@ -1273,15 +1310,36 @@ function generateFormCustomPalette()
     let acceptButton = mainBuilder.querySelector(".custom-form-accept");
     acceptButton.addEventListener("click", (e) => {
         e.preventDefault();
+        let newCustomPalette =  generateCustomPalette(customPaletteNumber)
+        let form = customPalettesContainer.querySelector(".custom-palette-form");
+        let addButton = customPaletteGenerateAddButton()
+        customPalettesContainer.insertBefore(addButton,form)
+        customPalettesContainer.replaceChild(newCustomPalette,form)
+        customPalettesAddButton = customPalettesContainer.querySelector('.custom-palettes-add-button')
     })
     let div = mainBuilder.querySelector('.custom-palette-bg');
     let selectAmount = mainBuilder.querySelector("#palette-amount");
     selectAmount.addEventListener(("change"), (e) => {
+        e.preventDefault()
         div.innerHTML = ''
         paletteBuilderPalettes(e.target.value,div)
+        customPaletteNumber = Number(e.target.value);
     })
     paletteBuilderPalettes(5,div)
-    customPalettesContainer.append(mainBuilder);
+    return mainBuilder;
+}
+
+function customPaletteGenerateAddButton()
+{
+    let addButton = document.createElement("button")
+    addButton.classList.add("button-reset", "custom-palettes-add-button");
+    addButton.setAttribute("aria-label", "add custom palette");
+    addButton.innerHTML = `<img src="plus.svg" width="26px" height="26px" alt="">`
+    addButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    handleCustomPalettesAddButton(e);
+    })
+    return addButton
 }
 
 
@@ -1295,6 +1353,7 @@ function paletteBuilderPalettes(num,div)
         block.innerHTML = `<form><input class="custom-input" data-text-id="${i}" name="colour-value"></form>`;
         let text = block.querySelector(".custom-input");
         text.addEventListener('blur',(e) => {
+            e.preventDefault()
             paletteTextUpdate(e,text.dataset.textId);
         })
         div.append(block);
@@ -1304,9 +1363,50 @@ function paletteBuilderPalettes(num,div)
 function paletteTextUpdate(e,id)
 {
     const value = e.target.value;
+    const newValueObj = colourCheck(value)
     const parent = e.target.parentElement.parentElement
-    parent.style.background = value;
-    customColourArr[id] = value;
+    parent.style.background = newValueObj.colour;
+    customColourArr[id] = newValueObj;
+}
+
+function colourCheck(value)
+{
+    debugger
+    if(CSS.supports("color", value))
+    {
+        if(value.startsWith("#"))
+        {
+            let newString = value.slice(1);
+            return {colour:value, colourText: newString}
+        }
+        else if(value.startsWith("hsl" || "HSL"))
+        {
+            
+            const hslObj = stripHslString(value.toLowerCase())
+            const hexValue = hslToHex(hslObj.h,hslObj.s,hslObj.l)
+            let newString = hexValue.slice(1);
+            console.log(hexValue);
+            return {colour:hexValue, colourText: newString}
+            
+        }
+        else if(value.startsWith("rgb" || "RGB"))
+        {
+            const hslObj = rgbaToHsl(value);
+            const hexValue = hslToHex(hslObj.h,hslObj.s,hslObj.l);
+            let newString = hexValue.slice(1);
+            console.log(hexValue);
+            return {colour:hexValue, colourText: newString}
+        }
+        else
+        {
+            return {colour:value,colourText: value}
+        }
+        
+    }
+    else
+    {
+        return {colour:"white", colourText: "FFFFFF"}
+    }
 }
 
 customPalettesAddButton.addEventListener("click", (e) => {
