@@ -1267,6 +1267,13 @@ function generateCustomPalette(num)
         let colourPalette = document.createElement('div');
         colourPalette.classList.add("palette-colour-container");
         colourPalette.innerHTML = `<button class="button-reset colour-pal" aria-label="Palette colour ${customColourArr[i] !== '' ? customColourArr[i].colour : '#ffffff'}" style="background: ${customColourArr[i] !== '' ? customColourArr[i].colour : '#ffffff'};"></button><p>${customColourArr[i] !== '' ? customColourArr[i].colourText.toUpperCase() : 'ffffff'.toUpperCase()}</p>`
+        let button = colourPalette.querySelector(".colour-pal");
+        button.addEventListener("click", (e) => 
+            {
+                debugger
+                handleColourClicked(e.target.style.backgroundColor)
+                updateInputColour(selectedColours[selectedColours.activeSelection].hex)
+            })
         div.append(colourPalette);
     }
     customColourArr = ["","","","",""];
@@ -1399,13 +1406,12 @@ function colourCheck(value)
         }
         else
         {
-            return {colour:value,colourText: value}
-        }
-        
+            return {colour:"#ffffff", colourText: "FFFFFF"}
+        }    
     }
     else
     {
-        return {colour:"white", colourText: "FFFFFF"}
+        return {colour:"#ffffff", colourText: "FFFFFF"}
     }
 }
 
