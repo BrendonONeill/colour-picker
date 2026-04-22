@@ -1025,6 +1025,7 @@ canvas
 {
     background-color: var(--main-bg);
     color: white;
+    padding: 0.1rem;
     border-radius: 5px;
 }
 
