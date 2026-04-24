@@ -93,7 +93,7 @@ let customPalettesContainer = document.getElementById("custom-palettes-container
 let ActiveForm;
 let customColourArr = ["","","","",""];
 let customPaletteNumber = 5
-
+let formActive = false;
 
 let pendingUpdate = false
 
@@ -1248,10 +1248,13 @@ let formCustomPaletteTemplate =
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
-            <option selected="selected" value="5">5</option>
+            <option value="5">5</option>
         </select>
 
-        <button class="button-reset custom-form-accept"><img src="true.svg" width="25" height="25" alt=""></button>
+        <div class="form-flex-buttons">
+            <button class="button-reset custom-form-delete"><img src="delete.svg" width="25" height="25" alt=""></button>
+            <button class="button-reset custom-form-accept"><img src="true.svg" width="25" height="25" alt=""></button>
+        </div>
     </form>
     <div class='custom-palette-bg'>
 
@@ -1263,6 +1266,16 @@ function generateCustomPalette(num)
 {
     let div = document.createElement('div');
     div.classList.add("palette",customPaletteSize(num));
+    let editButton = document.createElement("button");
+    editButton.classList.add("button-reset","custom-palette-edit-button");
+    editButton.innerHTML = `<img src="edit.svg" width="20px" height="20px" alt="">`
+    editButton.addEventListener("click",(e) => {
+        e.preventDefault();
+        let count = editButtonCollectValues(e.target.parentElement);
+        e.target.parentElement.remove()
+        editButtonHandler(count);
+    })
+    div.append(editButton)
     for (let i = 0; i < num; i++) {
         let colourPalette = document.createElement('div');
         colourPalette.classList.add("palette-colour-container");
@@ -1270,7 +1283,6 @@ function generateCustomPalette(num)
         let button = colourPalette.querySelector(".colour-pal");
         button.addEventListener("click", (e) => 
             {
-                debugger
                 handleColourClicked(e.target.style.backgroundColor)
                 updateInputColour(selectedColours[selectedColours.activeSelection].hex)
             })
@@ -1309,20 +1321,32 @@ function handleCustomPalettesAddButton()
     customPalettesContainer.replaceChild(form,customPalettesAddButton)
 }
 
-function generateFormCustomPalette()
+function generateFormCustomPalette(num=5)
 {
     const mainBuilder = document.createElement("div");
     mainBuilder.classList.add("custom-palette-form");
     mainBuilder.innerHTML = formCustomPaletteTemplate;
+    let select = mainBuilder.querySelector('#palette-amount');
+    select.value = num;
     let acceptButton = mainBuilder.querySelector(".custom-form-accept");
+    let deleteButton = mainBuilder.querySelector(".custom-form-delete");
     acceptButton.addEventListener("click", (e) => {
         e.preventDefault();
-        let newCustomPalette =  generateCustomPalette(customPaletteNumber)
+        let newCustomPalette =  generateCustomPalette(customPaletteNumber);
         let form = customPalettesContainer.querySelector(".custom-palette-form");
-        let addButton = customPaletteGenerateAddButton()
-        customPalettesContainer.insertBefore(addButton,form)
-        customPalettesContainer.replaceChild(newCustomPalette,form)
-        customPalettesAddButton = customPalettesContainer.querySelector('.custom-palettes-add-button')
+        let addButton = customPaletteGenerateAddButton();
+        customPalettesContainer.insertBefore(addButton,form);
+        customPalettesContainer.replaceChild(newCustomPalette,form);
+        customPalettesAddButton = customPalettesContainer.querySelector('.custom-palettes-add-button');
+    })
+    deleteButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        let form = customPalettesContainer.querySelector(".custom-palette-form");
+        let addButton = customPaletteGenerateAddButton();
+        customPalettesContainer.insertBefore(addButton,form);
+        form.remove();
+        customPalettesAddButton = customPalettesContainer.querySelector('.custom-palettes-add-button');
+        customColourArr = ["","","","",""];
     })
     let div = mainBuilder.querySelector('.custom-palette-bg');
     let selectAmount = mainBuilder.querySelector("#palette-amount");
@@ -1332,7 +1356,7 @@ function generateFormCustomPalette()
         paletteBuilderPalettes(e.target.value,div)
         customPaletteNumber = Number(e.target.value);
     })
-    paletteBuilderPalettes(5,div)
+    paletteBuilderPalettes(num,div)
     return mainBuilder;
 }
 
@@ -1356,8 +1380,12 @@ function paletteBuilderPalettes(num,div)
     for (let i = 0; i < num; i++) {
         let block  = document.createElement("div");
         block.classList.add("custom-palette-colour");
+        if(customColourArr[i] !== "")
+        {
+            block.style.background = customColourArr[i].colour;
+        }
         block.dataset.paletteId = i;
-        block.innerHTML = `<form><input class="custom-input" data-text-id="${i}" name="colour-value"></form>`;
+        block.innerHTML = `<form><input class="custom-input" ${customColourArr[i] !== "" ? 'value=#'+customColourArr[i].colourText : ""} data-text-id="${i}" name="colour-value"></form>`;
         let text = block.querySelector(".custom-input");
         text.addEventListener('blur',(e) => {
             e.preventDefault()
@@ -1378,7 +1406,6 @@ function paletteTextUpdate(e,id)
 
 function colourCheck(value)
 {
-    debugger
     if(CSS.supports("color", value))
     {
         if(value.startsWith("#"))
@@ -1415,10 +1442,29 @@ function colourCheck(value)
     }
 }
 
+function editButtonCollectValues(parent)
+{
+    let containers = parent.querySelectorAll(".palette-colour-container");
+    let containerCount = containers.length
+    containers.forEach((container,index) => {
+        let colour = container.querySelector(".colour-pal").style.background
+        let colourText = container.querySelector("p").textContent
+        customColourArr[index] = {colour, colourText}
+    })
+    return containerCount
+}
+
+function editButtonHandler(count)
+{
+    let form = generateFormCustomPalette(count)
+    customPalettesContainer.replaceChild(form,customPalettesAddButton)
+}
+
 customPalettesAddButton.addEventListener("click", (e) => {
     e.preventDefault();
     handleCustomPalettesAddButton(e);
 })
+
 
 
 function openDB() {

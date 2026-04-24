@@ -1071,6 +1071,7 @@ canvas
 
 .palette
 {
+    position: relative;
     width: 412px;
     column-gap: 0.6rem;
     height: 120px;
@@ -1104,6 +1105,26 @@ canvas
 .pal-xl
 {
     width: 415px;
+}
+
+.custom-palette-edit-button
+{
+    position: absolute;
+    top: 7px;
+    right: 7px;
+    background-color: var(--main-bg);
+    border-radius: 5px;
+    padding: 0.2rem;
+}
+
+.custom-palette-edit-button:hover
+{
+    background-color: var(--main-ui-colour-darker);
+}
+
+.custom-palette-edit-button img
+{
+    pointer-events: none;
 }
 
 .palette-colour-container
@@ -1218,6 +1239,22 @@ canvas
     align-content: center;
 }
 
+.form-flex-buttons
+{
+    display: flex;
+    column-gap: 1rem;
+}
+
+.custom-form-delete
+{
+    background-color: var(--main-bg);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.2rem 0.1rem;
+}
+
 .custom-form-accept
 {
     background-color: var(--main-bg);
@@ -1225,6 +1262,7 @@ canvas
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 0.2rem 0.1rem;
 }
 
 
