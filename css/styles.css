@@ -1023,9 +1023,9 @@ canvas
 
 #palette-amount
 {
+    margin-bottom: 0.1rem;
     background-color: var(--main-bg);
     color: white;
-    padding: 0.1rem;
     border-radius: 5px;
 }
 
@@ -1052,6 +1052,11 @@ canvas
     align-items: center;
     justify-content: center;
     box-shadow: rgba(26, 29, 32, 0.78).95px 1.95px 2.6px;
+}
+
+.error-input
+{
+    border: 2px solid red;
 }
 
 .palettes-container
