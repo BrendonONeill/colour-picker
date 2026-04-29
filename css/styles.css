@@ -1270,6 +1270,19 @@ canvas
     padding: 0.2rem 0.1rem;
 }
 
+footer
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+
+footer a
+{
+    color: white;
+}
+
 
 
 @media (min-width: 1800px) {
@@ -1815,11 +1828,47 @@ canvas
     width: 100%;
 }
 
+.custom-palette-form
+{
+    padding-inline: 0;
+}
+
+.custom-form-container
+{
+    padding-inline: 0.2rem;
+}
+
 .palette
 {
     width: 400px;
     column-gap: 0.2rem;
     height: 120px;
+    padding: 0;
+}
+
+.pal-xs
+{
+    width: 85px;
+}
+
+.pal-s
+{
+    width: 165px;
+}
+
+.pal-m
+{
+    width: 245px;
+}
+
+.pal-l
+{
+    width: 325px;
+}
+
+.pal-xl
+{
+    width: 415px;
 }
 
 .palette-colour-container
@@ -1832,8 +1881,8 @@ canvas
 
 .colour-pal
 {
-    width: 60px;
-    height: 60px;
+    width: 70px;
+    height: 70px;
 }
 
  }

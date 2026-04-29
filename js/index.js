@@ -98,9 +98,14 @@ let formType = "";
 
 
 let pendingUpdate = false
-
 let light = 50;
+
 const colourArray = colourArrayLoad()
+
+
+document.addEventListener("submit", (e) => {
+  e.preventDefault();
+});
 
 function colourArrayLoad()
 {
@@ -1271,6 +1276,7 @@ function generateCustomPalette(num,id,customColourArr)
     div.dataset.id = id;
     let editButton = document.createElement("button");
     editButton.classList.add("button-reset","custom-palette-edit-button");
+    editButton.setAttribute("aria-label", "Edit custom palette");
     editButton.innerHTML = `<img src="edit.svg" width="20px" height="20px" alt="">`
     editButton.addEventListener("click",(e) => {
         e.preventDefault();
@@ -1396,9 +1402,9 @@ function paletteBuilderPalettes(num,div)
             block.style.background = customColourArr[i].colour;
         }
         block.dataset.paletteId = i;
-        block.innerHTML = `<form><input class="custom-input" ${customColourArr[i] !== "" ? 'value=#'+customColourArr[i].colourText : ""} data-text-id="${i}" name="colour-value"></form>`;
+        block.innerHTML = `<form><input aria-label="Add colour to palette"  class="custom-input" ${customColourArr[i] !== "" ? 'value=#'+customColourArr[i].colourText : ""} data-text-id="${i}" name="colour-value"></form>`;
         let text = block.querySelector(".custom-input");
-        text.addEventListener('blur',(e) => {
+        text.addEventListener('blur', (e) => {
             e.preventDefault()
             paletteTextUpdate(e,text.dataset.textId);
         })
@@ -1493,7 +1499,6 @@ customPalettesAddButton.addEventListener("click", (e) => {
 
 function customPaletteUpdateStorage(arrInfo, type, id=0, num)
 {
-    debugger
     const storedCustomPalette = localStorage.getItem('custom-palettes');
     let obj
     if(storedCustomPalette === null)
