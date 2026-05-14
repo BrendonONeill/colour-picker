@@ -1162,7 +1162,9 @@ function updatingColourGradientDisplay()
 
     if(checkColour)
     {
+        
         gradDisplay.style.background = gradientString;
+        gradientString = gradientString + ');'
         gradFullString = gradientString;
     }
 }
