@@ -102,7 +102,6 @@ let light = 50;
 
 const colourArray = colourArrayLoad()
 
-
 document.addEventListener("submit", (e) => {
   e.preventDefault();
 });
@@ -122,7 +121,6 @@ let selectedColours = {
     secondSelected : {hue: 0, light: 0, sat: 0, hsl:"hsl(0, 100%, 100%)", hex:"#ffffff", rgba:"rgba(255, 255, 255, 1)", contrast:{white:{aaNormal:null,aaaNormal:null,aaLarge:null,aaaLarge:null},black:{aaNormal:null,aaaNormal:null,aaLarge:null,aaaLarge:null},other:{aaNormal:null,aaaNormal:null,aaLarge:null,aaaLarge:null}}},
     activeSelection : "firstSelected"
 }
-
 
 selectedColour.addEventListener("click", () => {
         if(!selectedColour.classList.contains("activeSelected"))
