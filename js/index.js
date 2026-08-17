@@ -216,13 +216,13 @@ canvas.addEventListener("mousemove", (e) => {
     const sat = Math.round((100 - (y / canvasHeight) * 100));
     const color = `hsl(${hue}, ${sat}%, ${light}%)`;
     hoverColour.style.backgroundColor = color
-    hoverColour.style.transform = `translate(${((e.clientX + window.scrollX) + 15)}px, ${((e.clientY + window.scrollY) - 125)}px)`;
+    hoverColour.style.transform = `translate(${((e.clientX + window.scrollX) + 4)}px, ${((e.clientY + window.scrollY) - 108)}px)`;
 
     if (!pendingUpdate) {
     pendingUpdate = true;
     requestAnimationFrame(() => {
         hoverColour.style.backgroundColor = color
-        hoverColour.style.transform = `translate(${((e.clientX + window.scrollX) - 15)}px, ${((e.clientY + window.scrollY) - 125)}px)`;
+        hoverColour.style.transform = `translate(${((e.clientX + window.scrollX) + 4)}px, ${((e.clientY + window.scrollY) - 108)}px)`;
         pendingUpdate = false;
     });
   }
