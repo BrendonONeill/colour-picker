@@ -134,13 +134,13 @@ main
 
 canvas
 {
-    cursor: url("/crosshair.svg") 15 10, crosshair;
+    cursor: url("/crosshair.svg") 12 12, crosshair;
     border: 3px solid var(--main-border-colour);
 }
 
 .canvas-too-bright
 {
-    cursor: url("/dark-crosshair.svg") 15 10, crosshair;
+    cursor: url("/dark-crosshair.svg") 12 12, crosshair;
 }
 
 .grid-main-colour-selection
