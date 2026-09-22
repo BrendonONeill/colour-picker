@@ -74,6 +74,7 @@ const hslTextHue = document.getElementById("hue-hsl-text");
 const hslTextSat = document.getElementById("sat-hsl-text");
 const hslTextLight = document.getElementById("light-hsl-text");
 const textButtonHSL= document.querySelector(".text-button-hsl");
+const hslContainerText = document.querySelector(".text-container-hsl")
 
 
 const gradListContainer = document.querySelector(".grad-colour-style-list-container");
@@ -287,12 +288,12 @@ function tooLight()
     if(light >= 70)
     {
         canvas.classList.add("canvas-too-bright");
-        hoverColour.classList.add("casvas-too-bright-hover-colour");
+        hoverColour.classList.add("canvas-too-bright-hover-colour");
     }
     else if(light < 70)
     {
         canvas.classList.remove("canvas-too-bright");
-        hoverColour.classList.remove("casvas-too-bright-hover-colour");
+        hoverColour.classList.remove("canvas-too-bright-hover-colour");
     }
 }
 
@@ -999,7 +1000,10 @@ function updateInputColour(value)
         selectedColour2Text.value = value.toUpperCase()
     }
 }
+
 const hslBoxValues = {h:0,s:50,l:50}
+
+
 function updateHSLBox(value,type)
 {
     if(type == 'hue')
@@ -1022,8 +1026,56 @@ function updateHSLBox(value,type)
     }
 
     hslBox.style.backgroundColor = `hsl(${hslBoxValues.h},${hslBoxValues.s}%,${hslBoxValues.l}%)`
-    hslBoxText.textContent = `hsl(${hslBoxValues.h},${hslBoxValues.s}%,${hslBoxValues.l}%)`
+    hslBoxText.value = `hsl(${hslBoxValues.h},${hslBoxValues.s}%,${hslBoxValues.l}%)`
 }
+
+function handleHSLBoxTextInput(value){
+    if(!value) 
+    {
+        hslContainerText.classList.add("error-input");
+        return;
+    }
+    if(!CSS.supports("color", value))
+    {
+        hslContainerText.classList.add("error-input");
+        return;
+    }
+    else
+    {
+        let hslObj = null;
+        if(value.startsWith("hsl"))
+        {
+            
+        }
+        else if(value.startsWith("#"))
+        {
+            let rgbValue = hexToRgb(value);
+            hslObj = rgbaToHsl(rgbValue);
+        }
+        else if(value.startsWith("rgb"))
+        {
+            hslObj = rgbaToHsl(value);
+        }
+        else
+        {
+            hslContainerText.classList.add("error-input");
+            return;
+        }
+            hslContainerText.classList.remove("error-input");
+            hslSliderHue.value = Math.round(hslObj.h);
+            hslSliderSat.value = Math.round(hslObj.s);
+            hslSliderLight.value = Math.round(hslObj.l);
+            hslTextHue.value = Math.round(hslObj.h);
+            hslTextSat.value = Math.round(hslObj.s);
+            hslTextLight.value = Math.round(hslObj.l);
+            hslBox.style.backgroundColor = `hsl(${hslObj.h},${hslObj.s}%,${hslObj.l}%)`;
+            hslBoxText.value = `hsl(${Math.round(hslObj.h)},${Math.round(hslObj.s)}%,${Math.round(hslObj.l)}%)`;
+            return
+}}
+
+hslBoxText.addEventListener('blur', (e) => {
+    handleHSLBoxTextInput(e.target.value.trim().toLowerCase())
+})
 
 hslSliderHue.addEventListener("input",e => updateHSLBox(e.target.value,'hue'))
 hslSliderSat.addEventListener("input",e => updateHSLBox(e.target.value,'sat'))
@@ -1039,7 +1091,9 @@ hslBox.addEventListener("click",(e) => {
 })
 
 textButtonHSL.addEventListener("click", () => {
-        let a = textButtonHSL.querySelector("p").textContent;
+        let parent = textButtonHSL.parentElement;
+        console.log(parent)
+        let a = parent.querySelector("input").value;
         tabCopy.classList.remove("colour-display-none")
         navigator.clipboard.writeText(a)
         setTimeout(() => {
