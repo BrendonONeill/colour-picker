@@ -779,17 +779,33 @@ canvas
     width: 75%;
 }
 
-.text-button-hsl
+.text-container-hsl
 {
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: var(--main-bg);
-    padding: 0.6rem;
+    padding: 0.6rem 0.4rem;
     border-radius: 5px;
     border: 2px solid white;
     margin-top: 0.4rem;
     width: 100%;
+    color: white;
+    position: relative;
+}
+
+.text-button-hsl{
+    position: absolute;
+    right: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#hue-box-text
+{
+    width: 86%;
+    background-color: transparent;
     color: white;
 }
 
