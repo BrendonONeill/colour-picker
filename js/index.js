@@ -1,5 +1,4 @@
 "use strict"
-
 const canvas = document.getElementById('hueCanvas');
 const ctx = canvas.getContext('2d');
 
@@ -89,11 +88,23 @@ let copyGradButton = document.querySelector(".copy-grad");
 let gradFullString = 'linear-gradient(0deg,#E5AF9B 10%, #9BD1E5 100%';
 
 
+let customPalettesAddButton = document.querySelector(".custom-palettes-add-button");
+let customPalettesContainer = document.getElementById("custom-palettes-container");
+let ActiveForm;
+let customColourArr = ["","","","",""];
+let customPaletteNumber = 5
+let formActive = false;
+let formType = "";
+
+
 let pendingUpdate = false
-
-
 let light = 50;
+
 const colourArray = colourArrayLoad()
+
+document.addEventListener("submit", (e) => {
+  e.preventDefault();
+});
 
 function colourArrayLoad()
 {
@@ -110,7 +121,6 @@ let selectedColours = {
     secondSelected : {hue: 0, light: 0, sat: 0, hsl:"hsl(0, 100%, 100%)", hex:"#ffffff", rgba:"rgba(255, 255, 255, 1)", contrast:{white:{aaNormal:null,aaaNormal:null,aaLarge:null,aaaLarge:null},black:{aaNormal:null,aaaNormal:null,aaLarge:null,aaaLarge:null},other:{aaNormal:null,aaaNormal:null,aaLarge:null,aaaLarge:null}}},
     activeSelection : "firstSelected"
 }
-
 
 selectedColour.addEventListener("click", () => {
         if(!selectedColour.classList.contains("activeSelected"))
@@ -206,13 +216,13 @@ canvas.addEventListener("mousemove", (e) => {
     const sat = Math.round((100 - (y / canvasHeight) * 100));
     const color = `hsl(${hue}, ${sat}%, ${light}%)`;
     hoverColour.style.backgroundColor = color
-    hoverColour.style.transform = `translate(${((e.clientX + window.scrollX) + 15)}px, ${((e.clientY + window.scrollY) - 125)}px)`;
+    hoverColour.style.transform = `translate(${((e.clientX + window.scrollX) + 4)}px, ${((e.clientY + window.scrollY) - 108)}px)`;
 
     if (!pendingUpdate) {
     pendingUpdate = true;
     requestAnimationFrame(() => {
         hoverColour.style.backgroundColor = color
-        hoverColour.style.transform = `translate(${((e.clientX + window.scrollX) - 15)}px, ${((e.clientY + window.scrollY) - 125)}px)`;
+        hoverColour.style.transform = `translate(${((e.clientX + window.scrollX) + 4)}px, ${((e.clientY + window.scrollY) - 108)}px)`;
         pendingUpdate = false;
     });
   }
@@ -1150,7 +1160,9 @@ function updatingColourGradientDisplay()
 
     if(checkColour)
     {
+        
         gradDisplay.style.background = gradientString;
+        gradientString = gradientString + ');'
         gradFullString = gradientString;
     }
 }
@@ -1167,7 +1179,8 @@ gradColourTypesStop.forEach((colourTypesStops) => {
     })
 })
 
-gradFormMain.addEventListener("change", () => {
+gradFormMain.addEventListener("change", (e) => {
+    e.preventDefault()
     updatingColourGradientDisplay()
 })
 
@@ -1234,6 +1247,327 @@ function generatePalette(mainContainer, arr)
 generatePalettes(collectionPalettes)
 
 
+let formCustomPaletteTemplate = 
+`
+    <form class='custom-form-container'>
+        <select name="amount" id="palette-amount">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+
+        <div class="form-flex-buttons">
+            <button class="button-reset custom-form-delete"><img src="delete.svg" width="25" height="25" alt=""></button>
+            <button class="button-reset custom-form-accept"><img src="true.svg" width="25" height="25" alt=""></button>
+        </div>
+    </form>
+    <div class='custom-palette-bg'>
+
+    </div>
+`
+
+
+function generateCustomPalette(num,id,customColourArr)
+{
+    let div = document.createElement('div');
+    div.classList.add("palette",customPaletteSize(num));
+    div.dataset.id = id;
+    let editButton = document.createElement("button");
+    editButton.classList.add("button-reset","custom-palette-edit-button");
+    editButton.setAttribute("aria-label", "Edit custom palette");
+    editButton.innerHTML = `<img src="edit.svg" width="20px" height="20px" alt="">`
+    editButton.addEventListener("click",(e) => {
+        e.preventDefault();
+        formType = 'edit'
+        let parent = e.target.parentElement;
+        let count = editButtonCollectValues(parent);
+        let id = parent.dataset.id
+        parent.remove()
+        editButtonHandler(count,id);
+    })
+    div.append(editButton)
+    for (let i = 0; i < num; i++) {
+        let colourPalette = document.createElement('div');
+        colourPalette.classList.add("palette-colour-container");
+        colourPalette.innerHTML = `<button class="button-reset colour-pal" aria-label="Palette colour ${customColourArr[i] !== '' ? customColourArr[i].colour : '#ffffff'}" style="background: ${customColourArr[i] !== '' ? customColourArr[i].colour : '#ffffff'};"></button><p>${customColourArr[i] !== '' ? customColourArr[i].colourText.toUpperCase() : 'ffffff'.toUpperCase()}</p>`
+        let button = colourPalette.querySelector(".colour-pal");
+        button.addEventListener("click", (e) => 
+            {
+                handleColourClicked(e.target.style.backgroundColor)
+                updateInputColour(selectedColours[selectedColours.activeSelection].hex)
+            })
+        div.append(colourPalette);
+    }
+    customColourArr = ["","","","",""];
+    return div;
+}
+
+function customPaletteSize(num)
+{
+    let classValue = ''
+    switch(num){
+        case 1:
+           classValue = "pal-xs"
+            break
+        case 2:
+           classValue = "pal-s"
+            break
+        case 3:
+            classValue = "pal-m"
+            break
+        case 4:
+            classValue = "pal-l"
+            break
+        default:
+            classValue = "pal-xl"
+    }
+    return classValue
+}
+
+
+function handleCustomPalettesAddButton()
+{
+    let form = generateFormCustomPalette()
+    customPalettesContainer.replaceChild(form,customPalettesAddButton)
+}
+
+function generateFormCustomPalette(num=5,editId=null)
+{
+    const mainBuilder = document.createElement("div");
+    mainBuilder.classList.add("custom-palette-form");
+    mainBuilder.innerHTML = formCustomPaletteTemplate;
+    let select = mainBuilder.querySelector('#palette-amount');
+    select.value = num;
+    let acceptButton = mainBuilder.querySelector(".custom-form-accept");
+    let deleteButton = mainBuilder.querySelector(".custom-form-delete");
+    acceptButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        let id = customPaletteUpdateStorage(customColourArr,formType,editId,customPaletteNumber);
+        let newCustomPalette =  generateCustomPalette(customPaletteNumber,id,customColourArr);
+        let form = customPalettesContainer.querySelector(".custom-palette-form");
+        let addButton = customPaletteGenerateAddButton();
+        customPalettesContainer.insertBefore(addButton,form);
+        customPalettesContainer.replaceChild(newCustomPalette,form);
+        customPalettesAddButton = customPalettesContainer.querySelector('.custom-palettes-add-button');
+        formType=""
+        customColourArr = ["","","","",""];
+    })
+    deleteButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        customPaletteUpdateStorage([],'delete',editId,0);
+        let form = customPalettesContainer.querySelector(".custom-palette-form");
+        let addButton = customPaletteGenerateAddButton();
+        customPalettesContainer.insertBefore(addButton,form);
+        form.remove();
+        customPalettesAddButton = customPalettesContainer.querySelector('.custom-palettes-add-button');
+        customColourArr = ["","","","",""];
+    })
+    let div = mainBuilder.querySelector('.custom-palette-bg');
+    let selectAmount = mainBuilder.querySelector("#palette-amount");
+    selectAmount.addEventListener(("change"), (e) => {
+        e.preventDefault()
+        div.innerHTML = ''
+        paletteBuilderPalettes(e.target.value,div)
+        customPaletteNumber = Number(e.target.value);
+    })
+    paletteBuilderPalettes(num,div)
+    return mainBuilder;
+}
+
+function customPaletteGenerateAddButton()
+{
+    let addButton = document.createElement("button")
+    addButton.classList.add("button-reset", "custom-palettes-add-button");
+    addButton.setAttribute("aria-label", "add custom palette");
+    addButton.innerHTML = `<img src="plus.svg" width="26px" height="26px" alt="">`
+    addButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    formType = "new"
+    handleCustomPalettesAddButton(e);
+    })
+    return addButton
+}
+
+
+function paletteBuilderPalettes(num,div)
+{
+    
+    for (let i = 0; i < num; i++) {
+        let block  = document.createElement("div");
+        block.classList.add("custom-palette-colour");
+        if(customColourArr[i] !== "")
+        {
+            block.style.background = customColourArr[i].colour;
+        }
+        block.dataset.paletteId = i;
+        block.innerHTML = `<form><input aria-label="Add colour to palette"  class="custom-input" ${customColourArr[i] !== "" ? 'value=#'+customColourArr[i].colourText : ""} data-text-id="${i}" name="colour-value"></form>`;
+        let text = block.querySelector(".custom-input");
+        text.addEventListener('blur', (e) => {
+            e.preventDefault()
+            paletteTextUpdate(e,text.dataset.textId);
+        })
+        div.append(block);
+    }
+}
+
+function paletteTextUpdate(e,id)
+{
+    const value = e.target.value;
+    const newValueObj = colourCheck(value)
+    const parent = e.target.parentElement.parentElement
+    if(!newValueObj.error){
+        parent.style.background = newValueObj.colour;
+        if(e.target.classList.contains("error-input"))
+        {
+            e.target.classList.remove("error-input");
+            e.target.style.border = '2px solid white';
+        }
+    }
+    else
+    {
+        e.target.classList.add("error-input");
+        e.target.style.border = '2px solid red';
+    }
+    customColourArr[id] = newValueObj;
+}
+
+function colourCheck(value)
+{
+    if(CSS.supports("color", value))
+    {
+        if(value.startsWith("#"))
+        {
+            let newString = value.slice(1);
+            return {colour:value, colourText: newString, error:false}
+        }
+        else if(value.startsWith("hsl" || "HSL"))
+        {
+            
+            const hslObj = stripHslString(value.toLowerCase())
+            const hexValue = hslToHex(hslObj.h,hslObj.s,hslObj.l)
+            let newString = hexValue.slice(1);
+            console.log(hexValue);
+            return {colour:hexValue, colourText: newString, error:false}
+            
+        }
+        else if(value.startsWith("rgb" || "RGB"))
+        {
+            const hslObj = rgbaToHsl(value);
+            const hexValue = hslToHex(hslObj.h,hslObj.s,hslObj.l);
+            let newString = hexValue.slice(1);
+            console.log(hexValue);
+            return {colour:hexValue, colourText: newString, error:false}
+        }
+        else
+        {
+            return {colour:"#ffffff", colourText: "FFFFFF", error:true}
+        }    
+    }
+    else
+    {
+        return {colour:"#ffffff", colourText: "FFFFFF", error:true}
+    }
+}
+
+function editButtonCollectValues(parent)
+{
+    let containers = parent.querySelectorAll(".palette-colour-container");
+    let containerCount = containers.length
+    containers.forEach((container,index) => {
+        let colour = container.querySelector(".colour-pal").style.background
+        let colourText = container.querySelector("p").textContent
+        customColourArr[index] = {colour, colourText}
+    })
+    return containerCount
+}
+
+function editButtonHandler(count,id)
+{
+    let form = generateFormCustomPalette(count,id)
+    customPalettesContainer.replaceChild(form,customPalettesAddButton)
+}
+
+
+customPalettesAddButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    formType = "new"
+    handleCustomPalettesAddButton(e);
+})
+
+
+function customPaletteUpdateStorage(arrInfo, type, id=0, num)
+{
+    const storedCustomPalette = localStorage.getItem('custom-palettes');
+    let obj
+    if(storedCustomPalette === null)
+    {
+        obj = {id:0, customPalettes: {}}
+    }
+    else
+    {
+        obj = JSON.parse(storedCustomPalette);
+    }
+    let updatedArrInfo = [];
+    for (let i = 0; i < num; i++) {
+        updatedArrInfo.push(arrInfo[i]);
+    }
+
+    if(type == 'new')
+    {
+        let idObj = obj.id + 1
+        obj.id++
+        obj.customPalettes[idObj] = updatedArrInfo
+        localStorage.setItem('custom-palettes', JSON.stringify(obj));
+        return idObj
+    }
+    else if(type == 'edit')
+    {
+        if(id == 0)
+        {
+            console.log("error");
+        }
+        console.log(updatedArrInfo)
+        obj.customPalettes[id] = updatedArrInfo
+        localStorage.setItem('custom-palettes', JSON.stringify(obj));
+        return id
+    }
+    else if(type == 'delete')
+    {
+        delete obj.customPalettes[id];
+        obj.id--
+        console.log(obj)
+        localStorage.setItem('custom-palettes', JSON.stringify(obj));
+    }
+
+    return 0
+}
+
+function onStartCustom()
+{
+    const storedCustomPalette = localStorage.getItem('custom-palettes');
+    let obj
+    if(storedCustomPalette === null)
+    {
+        return
+    }
+    else
+    {
+        obj = JSON.parse(storedCustomPalette);
+    }
+    let reOrderArr = []
+    for (const [key, value] of Object.entries(obj.customPalettes)) {
+        reOrderArr.push([key,value]);
+    }
+    
+    for (let i = reOrderArr.length - 1; i >= 0; i--) {
+        let newCustomPalette = generateCustomPalette(reOrderArr[i][1].length,reOrderArr[i][0],reOrderArr[i][1]);
+        customPalettesContainer.append(newCustomPalette);
+    }
+}
+
+
 function openDB() {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open("ColorPickerDB", 1);
@@ -1290,3 +1624,4 @@ function onStart()
 }
 
 onStart()
+onStartCustom()
